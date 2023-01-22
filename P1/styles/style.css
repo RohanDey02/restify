@@ -1,0 +1,16 @@
+/*
+ * style.css
+ *
+ * CSC309 Project - Rohan Dey and Hamoon Zamiri
+ * Winter 2023
+ *
+ */
+
+@import "general.css";
+@import "header.css";
+@import "home.css";
+
+:root {
+    --main-bg-colour: #CCC2A0;
+    --main-accent-colour: #5A4437;
+}
