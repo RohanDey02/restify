@@ -3,11 +3,24 @@ body {
     background-color: var(--main-bg-colour);
     display: flex;
     flex-direction: column;
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     min-height: 100vh;
     overflow: hidden auto;
     padding: 0;
+}
+
+.section-title {
+    color: var(--main-accent-colour);
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    display: inline;
 }
 
 .page-container {
@@ -44,6 +57,6 @@ body {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.container {
+.card-container {
     padding: 2px 16px;
 }

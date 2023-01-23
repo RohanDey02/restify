@@ -1,6 +1,8 @@
 /* Header */
 .header {
     background-color: var(--main-accent-colour);
+    background-image: url(../assets/LineOfTrees.png);
+    background-size: 100vw;
     display: flex;
     height: 10vh;
     justify-content: space-between;
@@ -31,7 +33,7 @@
 
 .header-left h1 {
     font-size: 1.5vw;
-    margin: 15px 5px 0px 0px;
+    margin: 10px 5px 0px 0px;
     text-align: right;
 }
 
