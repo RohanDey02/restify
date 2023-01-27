@@ -4,7 +4,7 @@ document.getElementsByClassName("filter-button")[0].onclick = () => {
     modal.style.display = "block";
 };
 
-document.getElementsByClassName("filter-modal-close")[0].onclick = () => {
+document.getElementsByClassName("modal-close")[0].onclick = () => {
     modal.style.display = "none";
 };
 

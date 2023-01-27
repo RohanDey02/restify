@@ -33,7 +33,7 @@ body {
 }
 
 /* Cards */
-.card-grids {
+.cards-grid {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     gap: 1rem;
@@ -59,4 +59,43 @@ body {
 
 .card-container {
     padding: 2px 16px;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    margin: auto;
+    padding: 20px;
+    width: 80vw;
+}
+
+/* Within the Modal */
+.modal-content h4, input, label, select {
+    color: var(--main-accent-colour);
+    margin: 5px 0px 5px 0px;
+}
+
+.modal-content button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+}
+
+/* The Close Button */
+.modal-close {
+    color: var(--main-accent-colour);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    cursor: pointer;
 }

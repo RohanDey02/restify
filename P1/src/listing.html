@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="page-container">
+		<!-- Header -->
+		<header>
+			<div class="header-left">
+				<a href="./home.html">
+					<i class="fa-solid fa-house"></i>
+					<h1 class="logo">Restify</h1>
+				</a>
+			</div>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<i class="fa-solid fa-bars"></i>
+					<i class="fa-solid fa-user"></i>
+				</button>
+				<div class="dropdown-content">
+					<a href="./accountHost.html">Account Settings</a>
+					<a href="#">Your Reservations</a>
+					<a href="#">Sign In/Out</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<div class="content">
+			<div class="section-title">
+				<h2>Massive Lodge With Tall Trees</h2>
+				<div class="listing-image-grid">
+					<img class="listing-main-img" src="../assets/lodge.jpg">
+					<img src="../assets/lodgeListing2.jpg">
+					<img src="../assets/lodgeListing3.jpg">
+					<img src="../assets/lodgeListing4.jpg">
+					<img src="../assets/lodgeListing5.jpg">
+				</div>
+
+				<div>
+					<h2>
+						$712/night - Hosted By: Mark Zuckerberg -
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star"></span>
+						<span> - 4.05/5</span>
+					</h2>
+				</div>
+
+				<p>8 guests - 4 bedrooms, 3 bathrooms</p>
+			</div>
+
+			<div class="listing-bottom-grid">
+				<div class="listing-description">
+					<p>
+						A modern, private lodge secluded within a private 19 acres, just 90 miles away from Southern
+						Ontario as shown in the Toronto Star! This 4 bedroom 3 bathroom lodge was developed in response
+						to the beautiful landscape it is placed within and is surrounded by forest and wildlife,
+						overlooking a beautiful lake.
+						<br><br>
+						The lodge comes with High-Speed Fiber Optic Internet along with Ducted A/C & Central Heating.
+						The bedroom arrangements are as follows:
+					</p>
+					<ul style="color: var(--main-accent-colour)">
+						<li>Master Bedroom: Queen Bed</li>
+						<li>Bedroom 2: Full Bed</li>
+						<li>Bedroom 3: Full Bed</li>
+						<li>Bedroom 4: Twin Bunk Bed</li>
+					</ul>
+					<p>
+						Please note that this is lodge is appropriate for a maximum of 12 guests, but 8 guests are
+						recommended for optimal comfort.
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id venenatis neque, sit amet
+						tincidunt nisl. Phasellus in urna magna. Class aptent taciti sociosqu ad litora torquent per
+						conubia nostra, per inceptos himenaeos. Donec pretium enim et pharetra pretium. In hac habitasse
+						platea dictumst. Maecenas in justo rhoncus, mollis felis a, scelerisque augue. Sed non neque sit
+						amet erat egestas mattis. Ut vitae scelerisque augue. Donec fermentum lectus semper quam
+						egestas, non blandit tortor imperdiet. Nulla sodales mauris sit amet sapien scelerisque, vitae
+						tempus leo sagittis. Pellentesque ex lorem, efficitur et est sed, molestie vehicula diam. Etiam
+						sagittis dapibus eros. Sed ullamcorper est a hendrerit dictum.
+					</p>
+					<p>
+						Suspendisse a nunc leo. Mauris tellus ex, ullamcorper posuere sollicitudin a, lobortis non diam.
+						Morbi quis ex venenatis, sollicitudin justo ut, luctus eros. Aliquam ac mauris ante. Vestibulum
+						vehicula libero sit amet libero sagittis varius. Duis venenatis felis aliquet mi dapibus
+						blandit. Proin sagittis tellus id maximus semper. Nam tempus augue massa, sed gravida massa
+						dignissim quis. Integer ultricies turpis nunc, vitae tristique diam placerat ac.
+					</p>
+					<p>
+						Morbi feugiat felis id lacus ultrices gravida. Duis ac nisi vitae risus mollis sodales. Cras a
+						gravida tortor. Suspendisse non lobortis metus, vitae varius lorem. Nullam ac hendrerit lorem.
+						Nam rutrum mi velit, in feugiat augue interdum sed. Sed ut aliquet elit, eget dignissim mauris.
+						Donec porttitor velit eu commodo blandit. Nam faucibus ullamcorper feugiat. Suspendisse justo
+						mauris, lobortis sit amet nulla in, aliquet euismod orci. Etiam lacinia felis ut mi euismod, sit
+						amet laoreet neque mollis. Orci varius natoque penatibus et magnis dis parturient montes,
+						nascetur ridiculus mus.
+					</p>
+				</div>
+				<div class="listing-booking-tool">
+					<form name="listingBookingToolForm" action="./home.html">
+						<div class="listing-booking-grid">
+							<div class="listing-booking-checkin-field">
+								<label>Check-in</label>
+								<br>
+								<input type="date" placeholder="MM-DD-YYYY">
+							</div>
+
+							<div class="listing-booking-checkout-field">
+								<label>Check-out</label>
+								<br>
+								<input type="date" placeholder="MM-DD-YYYY">
+							</div>
+
+							<div class="listing-booking-guests-field">
+								<label>Guests</label>
+								<br>
+								<select>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+
+						<hr>
+
+						<button class="listing-booking-button">
+							<span onclick="listingBookingToolForm.submit()">
+								Reserve
+							</span>
+						</button>
+
+						<p>$712 CAD x 5 nights</p>
+						<p>Total: $3560 CAD</p>
+					</form>
+				</div>
+			</div>
+
+			<h2 id="listing-comments-title">Comments</h2>
+			<ul class="listing-comment-cards">
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 1</h3>
+						<div>
+							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 2</h3>
+						<div>
+							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab repudiandae magnam harum
+								natus fuga et repellat in maiores.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 3</h3>
+						<div>
+							<p>Phasellus ultrices lorem vel bibendum ultricies. In hendrerit nulla a ante dapibus
+								pulvinar eu eget quam.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 4</h3>
+						<div>
+							<p>Aenean posuere mauris quam, pellentesque auctor mi bibendum nec. Sed scelerisque lacus
+								nisi, quis auctor lorem ornare vel.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 5</h3>
+						<div>
+							<p>Vestibulum pharetra fringilla felis sit amet tempor. Interdum et malesuada fames ac ante
+								ipsum primis in faucibus. Cras et arcu sit amet est consequat feugiat. Nam ut sapien
+								pulvinar.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+				<li class="listing-comment-card">
+					<div>
+						<h3>Comment 6</h3>
+						<div>
+							<p>Donec ut tincidunt nisl. Vivamus eget eros id elit feugiat mollis. Nam sed sem quis
+								libero finibus tempor.</p>
+						</div>
+					</div>
+
+					<button class="listing-comment-expand">Expand Comment</button>
+				</li>
+			</ul>
+
+			<div class="listing-comment-modal">
+				<div class="modal-content">
+					<span class="modal-close">&times;</span>
+
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab repudiandae magnam harum natus fuga
+						et repellat in maiores.</p>
+				</div>
+			</div>
+
+			<!-- JS Scripts -->
+			<script type="text/javascript" src="../js/listing-comments.js"></script>
+		</div>
+	</div>
+</body>
+
+</html>

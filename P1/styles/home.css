@@ -36,47 +36,9 @@
     z-index: 1;
 }
 
-/* Modal Content */
-.filter-modal-content {
-    background-color: var(--main-bg-colour);
-    border: 2px solid var(--main-accent-colour);
-    margin: auto;
-    padding: 20px;
-    width: 80vw;
-}
-
-/* Within the Filter Modal */
-.filter-modal-content h4, input, label, select {
-    color: var(--main-accent-colour);
-    margin: 5px 0px 5px 0px;
-}
-
-.filter-modal-content button {
-    background-color: var(--main-bg-colour);
-    border: 2px solid var(--main-accent-colour);
-    border-radius: 5px;
-    color: var(--main-accent-colour);
-    display: inline-block;
-    font-size: 16px;
-    padding: 8px 16px;
-    text-align: center;
-}
-
 .sort-filter {
     font-weight: 700;
     margin: 10px 0px 10px 0px;
 }
 
-/* The Close Button */
-.filter-modal-close {
-    color: var(--main-accent-colour);
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.filter-modal-close:hover,
-.filter-modal-close:focus {
-    cursor: pointer;
-}
-
+/* Refer to general.css for the rest of the modal */

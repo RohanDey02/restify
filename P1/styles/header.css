@@ -1,5 +1,5 @@
 /* Header */
-.header {
+header {
     background-color: var(--main-accent-colour);
     background-image: url(../assets/LineOfTrees.png);
     background-size: 100vw;

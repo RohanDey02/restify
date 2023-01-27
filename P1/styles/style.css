@@ -13,6 +13,7 @@
 @import "general.css";
 @import "header.css";
 @import "home.css";
+@import "listing.css";
 
 :root {
     --main-bg-colour: #CCC2A0;
