@@ -1,9 +1,9 @@
 /* Listing */
 .listing-image-grid {
-    box-sizing: border-box;
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-right: 0.5rem;
 }
 
 .listing-image-grid > img {
@@ -53,7 +53,7 @@
     display: grid;
     gap: 1rem;
     grid-template-areas: 'check-in check-out'
-        'guests guests';
+                         'guests guests';
     margin-top: 1rem;
 }
 
@@ -153,7 +153,7 @@
 .listing-comment-cards {
     color: var(--main-accent-colour);
     display: flex;
-    overflow-x: scroll;
+    overflow-x: scroll; 
     scroll-snap-type: x mandatory;
 }
 
@@ -184,21 +184,52 @@
     width: 100%;
 }
 
-@media (min-width: 500px) {
+/* Responsive layout */
+@media only screen and (max-width: 600px) {
+    .listing-image-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .listing-main-img {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .listing-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .listing-description {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .listing-comment-cards {
+        display: relative;
+        overflow: hidden;
+    }
+    
     .listing-comment-card {
         flex-basis: calc(50% - 10px);
     }
 
-    .listing-comment-card:not(:last-child) {
-        margin-right: 20px;
+    .listing-comment-cards {
+        color: var(--main-accent-colour);
+        display: inline-block;
+        margin-left: -2.5rem;
+        margin-top: -1.5rem;
+    }
+
+    .listing-comment-card {
+        margin-top: 1.5rem;
     }
 }
 
-@media (min-width: 700px) {
+@media screen and (min-width: 700px) {
     .listing-comment-card {
         flex-basis: calc(calc(100% / 3) - 20px);
     }
-
+    
     .listing-comment-card:not(:last-child) {
         margin-right: 30px;
     }
@@ -221,7 +252,7 @@
     height: 100%;
     left: 0;
     overflow: auto;
-    padding-top: 15%;
+    padding-top: 20vh;
     position: fixed;
     top: 0;
     width: 100%;
