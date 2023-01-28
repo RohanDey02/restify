@@ -1,4 +1,11 @@
 /* Home Page Styles */
+.card-pricing-rating {
+    color: var(--main-accent-colour);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
 .filter {
     background-color: var(--main-bg-colour);
     border: 2px solid var(--main-accent-colour);
