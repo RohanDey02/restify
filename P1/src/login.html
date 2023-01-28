@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restify</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="login-signup-background">
+        <div class="login-signup-card">
+            <div class="login-signup-title">
+                <span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+            </div>
+            
+            <form action="./home.html">
+                <div class="login-signup-field">
+                    <span class="fa fa-user"></span>
+                    <input type="email" placeholder="Email" required>
+                </div>
+
+                <div class="login-signup-field login-signup-space">
+                    <span class="fa fa-lock"></span>
+                    <input type="password" class="user-pass" placeholder="Password" required>
+                    
+                    <span class="show-password" onclick="toggleVisibility()">SHOW</span>
+                </div>
+
+                <hr style="margin-top: 1rem;">
+
+                <div class="login-signup-submit login-signup-space">
+                    <input type="submit" value="LOGIN">
+                </div>
+            </form>
+
+            <div class="no-account">
+                Don't have an account?
+                <a href="./signup.html">Signup Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+	<script type="text/javascript" src="../js/password.js"></script>
+</body>
+
+</html>
