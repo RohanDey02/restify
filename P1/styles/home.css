@@ -7,22 +7,22 @@
 }
 
 .filter {
-    background-color: var(--main-bg-colour);
-    border: 2px solid var(--main-accent-colour);
-    border-radius: 100vw;
     display: flex;
-    height: 50px;
-    justify-content: center;
-    margin: 1.2rem 0 1.2rem auto;
-    width: 5vw;
+    justify-content: space-between;
 }
 
 .filter-button {
     background-color: var(--main-bg-colour);
-    border: none;
+    border: 2px solid var(--main-accent-colour);
     border-radius: 100vw;
     color: var(--main-accent-colour);
     font-size: 24px;
+    line-height: 24px;
+    margin-bottom: 0.5rem;
+    margin-right: -1rem;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .filter-button:focus,
@@ -38,6 +38,7 @@
     overflow: auto;
     padding-top: 100px;
     position: fixed;
+    text-align: left;
     top: 0;
     width: 100%;
     z-index: 1;
