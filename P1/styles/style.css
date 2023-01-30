@@ -15,6 +15,7 @@
 @import "home.css";
 @import "listing.css";
 @import "login-signup.css";
+@import "reservation.css";
 
 :root {
     --main-bg-colour: #CCC2A0;
