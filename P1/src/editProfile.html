@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="edit-profile-container" class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="./home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="./accountUser.html">Account Settings</a>
+					<a href="#">Notifications</a>
+					<a href="./reservation.html">Your Reservations</a>
+					<a href="./login.html">Sign Out</a>
+				</div>
+			</div>
+		</header>
+
+        <div id="content-edit-profile" class="content">
+            <h1>Edit Profile</h1>
+            <form class="update-profile-form">
+                <label class="label-firstname">First Name: </label>
+                <input value="John" class="firstname" type="name">
+
+                <label class="label-lastname">Last Name: </label>
+                <input value="Doe" class="lastname" type="name">
+
+                <label class="label-email">Email: </label>
+                <input value="john.doe@mail.com" class="email" type="email">
+
+                <label class="label-avatar">Avatar: </label>
+                <input class="avatar" type="file">
+
+                <label class="label-phone">Phone Number: </label>
+                <input value="123-456-789" class="phone" type="tel">
+
+                <div class="form-buttons">
+                    <button class="cancel-button">Cancel</button>
+                    <button class="save-button">Save Changes</button>
+                </div>
+            </form>
+        </div>
+</body>

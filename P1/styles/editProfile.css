@@ -1,0 +1,94 @@
+.update-profile-form {
+    display: grid;
+    gap: 10px;
+    width: 40vw;
+    grid-template-areas: "label-firstname firstname firstname"
+                         "label-lastname lastname lastname"
+                         "label-email email email"
+                         "label-phone phone phone"
+                         "label-avatar avatar avatar"
+                         "buttons buttons buttons";
+    text-align: right;
+}
+@media screen and (max-width: 750px) {
+    .update-profile-form {
+        width: 80vw;
+    }
+}
+
+.label-firstname {
+    grid-area: label-firstname;
+}
+.label-lastname {
+    grid-area: label-lastname;
+}
+
+.label-email {
+    grid-area: label-email;
+}
+
+.label-phone {
+    grid-area: label-phone;
+}
+.label-avatar {
+    grid-area: label-avatar;
+}
+.firstname {
+    grid-area: firstname;
+}
+
+.lastname {
+    grid-area: lastname;
+}
+
+.email {
+    grid-area: email;
+}
+
+.phone {
+    grid-area: phone;
+}
+
+.avatar {
+    grid-area: avatar;
+}
+
+#edit-profile-container {
+    width: 100%;
+}
+
+#content-edit-profile {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-buttons button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+}
+.form-buttons button:hover {
+    cursor: pointer;
+}
+.cancel-button:hover {
+    background-color: red;
+}
+
+.save-button:hover {
+    background-color: green;
+}
