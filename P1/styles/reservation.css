@@ -1,0 +1,17 @@
+.curr-card-modal {
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    padding-top: 100px;
+    position: fixed;
+    text-align: left;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+#curr-res {
+    cursor: pointer;
+}

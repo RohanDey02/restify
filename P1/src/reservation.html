@@ -42,24 +42,37 @@
                 <p>johnsmith@gmail.com</p>
             </div>
             <h3>Current Reservations</h3>
-            <div class="cards-grid">
-                <div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
-						<div class="card-container">
-							<h4><b>Massive Lodge With Tall Trees</b></h4>
-							<div class="card-pricing-rating">
-								<span>$712/night</span>
-								<div>
-									<span class="fa fa-star"></span>
-									<span> - 4.05/5</span>
-								</div>
-							</div>
-                            <h4 style="color: green;">Status: Approved</h4>
-						</div>
+
+			<!-- Modal Current Reservation -->
+			<div class="curr-card-modal">
+				<div class="modal-content res-modal-content">
+					<span class="modal-close">&times;</span>
+					<h4><b>Massive Lodge With Tall Trees</b></h4>
+					<p>2023-01-19 - 2023-01-22</p>
+					<p>$712/night x 3 nights</p>
+					<p>Total: $2136</p>
+					<a href="listing.html">
+						<button style="cursor: pointer;">View Original Listing</button>
 					</a>
 				</div>
+			</div>
+            <div class="cards-grid">
+                <div id="curr-res" class="card">
+					<img src="../assets/lodge.jpg" style="width:100%">
+					<div class="card-container">
+						<h4><b>Massive Lodge With Tall Trees</b></h4>
+						<div class="card-pricing-rating">
+							<span>$712/night</span>
+							<div>
+								<span class="fa fa-star"></span>
+								<span> - 4.05/5</span>
+							</div>
+						</div>
+						<h4 style="color: green;">Status: Approved</h4>
+					</div>
+				</div>
             </div>
+
             <h3>Past Reservations</h3>
             <div class="cards-grid">
                 <div class="card">
@@ -145,6 +158,8 @@
             </div>
 		</div>
 	</div>
+	<!-- JS Scripts -->
+	<script type="text/javascript" src="../js/reservation.js"></script>
 </body>
 
 </html>
