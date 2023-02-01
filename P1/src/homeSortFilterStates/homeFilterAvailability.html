@@ -5,21 +5,16 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Restify</title>
-	<link rel="stylesheet" href="../styles/style.css">
+	<link rel="stylesheet" href="../../styles/style.css">
 	<!-- Icons -->
 	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
 </head>
 
-<!--
-	Sort and Filter Procedure:
-
-	Home -> Sort Price -> Sort Rating -> Filter Availability -> Reset -> Sort Price -> Home
--->
 <body>
 	<div class="page-container">
 		<!-- Header -->
 		<header>
-			<a href="./home.html" class="logo">
+			<a href="./homeResetPoint.html" class="logo">
 				<span class="fa-solid fa-house"></span>
 				<span>Restify</span>
 			</a>
@@ -31,10 +26,10 @@
 				</button>
 
 				<div class="dropdown-content">
-					<a href="./accountUser.html">Account Settings</a>
+					<a href="./../accountUser.html">Account Settings</a>
 					<a href="#">Notifications</a>
-					<a href="./reservation.html">Your Reservations</a>
-					<a href="./login.html">Sign Out</a>
+					<a href="./../reservation.html">Your Reservations</a>
+					<a href="./../login.html">Sign Out</a>
 				</div>
 			</div>
 		</header>
@@ -42,7 +37,7 @@
 		<!-- Main Content -->
 		<div class="content">
 			<div class="filter">
-				<a href="./home.html" class="logo">
+				<a href="../home.html" class="logo">
 					<span></span>
 					<span></span>
 				</a>
@@ -59,7 +54,7 @@
 				<div class="modal-content">
 					<span class="modal-close">&times;</span>
 
-					<form action="./homeSortFilterStates/homeSortPrice.html">
+					<form action="./homeResetPoint.html">
 						<div class="sort-filter">
 							<label>Sort</label>
 						</div>
@@ -129,38 +124,23 @@
 
 			<div class="cards-grid">
 				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
 						<div class="card-container">
-							<h4><b>Massive Lodge With Tall Trees</b></h4>
+							<h4><b>We Have Running Water!</b></h4>
 							<div class="card-pricing-rating">
-								<span>$712/night</span>
+								<span>$67/night</span>
 								<div>
 									<span class="fa fa-star"></span>
-									<span> - 4.05/5</span>
+									<span> - 2.02/5</span>
 								</div>
 							</div>
 						</div>
 					</a>
 				</div>
 				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
-						<div class="card-container">
-							<h4><b>Cool Lodge With A Lakeside View</b></h4>
-							<div class="card-pricing-rating">
-								<span>$791/night</span>
-								<div>
-									<span class="fa fa-star"></span>
-									<span> - 4.25/5</span>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
 						<div class="card-container">
 							<h4><b>Modern Lodge With Mountain Scenery</b></h4>
 							<div class="card-pricing-rating">
@@ -174,23 +154,8 @@
 					</a>
 				</div>
 				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
-						<div class="card-container">
-							<h4><b>Spacious Lodge With Bear Waiters</b></h4>
-							<div class="card-pricing-rating">
-								<span>$173/night</span>
-								<div>
-									<span class="fa fa-star"></span>
-									<span> - 2.95/5</span>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
 						<div class="card-container">
 							<h4><b>Private Lodge Retreat!</b></h4>
 							<div class="card-pricing-rating">
@@ -204,15 +169,30 @@
 					</a>
 				</div>
 				<div class="card">
-					<a href="./listing.html">
-						<img src="../assets/lodge.jpg" style="width:100%">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
 						<div class="card-container">
-							<h4><b>We Have Running Water!</b></h4>
+							<h4><b>Massive Lodge With Tall Trees</b></h4>
 							<div class="card-pricing-rating">
-								<span>$67/night</span>
+								<span>$712/night</span>
 								<div>
 									<span class="fa fa-star"></span>
-									<span> - 2.02/5</span>
+									<span> - 4.05/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Cool Lodge With A Lakeside View</b></h4>
+							<div class="card-pricing-rating">
+								<span>$791/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.25/5</span>
 								</div>
 							</div>
 						</div>
@@ -223,7 +203,7 @@
 	</div>
 
 	<!-- JS Scripts -->
-	<script type="text/javascript" src="../js/filter.js"></script>
+	<script type="text/javascript" src="../../js/filter.js"></script>
 </body>
 
 </html>
