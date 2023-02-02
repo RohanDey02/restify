@@ -11,7 +11,35 @@
     width: 100%;
     z-index: 1;
 }
+.res-modal-content {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    padding: 20px;
+    width: 80vw;
+    margin: auto;
+}
 
+/* Within the Modal */
+.res-modal-content h4, input, label, select {
+    color: var(--main-accent-colour);
+    margin: 5px 0px 5px 0px;
+}
+
+.res-modal-content button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+}
 #curr-res {
     cursor: pointer;
+}
+
+.accpet-reject {
+    display: flex;
+    margin-top: 40px;
 }
