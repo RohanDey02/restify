@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+
+<!--
+	Sort and Filter Procedure:
+
+	Home -> Sort Price -> Sort Rating -> Filter Availability -> Reset -> Sort Price -> Home
+-->
+<body>
+	<div class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="./home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="./accountUser.html">Account Settings</a>
+					<a href="./notificationsUser.html">Notifications</a>
+					<a href="./reservation.html">Your Reservations</a>
+					<a href="./login.html">Sign Out</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<div class="content">
+			<div class="filter">
+				<a href="./home.html" class="logo">
+					<span></span>
+					<span></span>
+				</a>
+
+				<div class="header-right">
+					<button class="filter-button">
+						<span class="fa-solid fa-arrow-up-short-wide" style="margin-left: 10px;"></span>
+						<span class="fa-solid fa-filter" style="margin-right: 10px;"></span>
+					</button>
+				</div>
+			</div>
+
+			<div class="filter-modal">
+				<div class="modal-content">
+					<span class="modal-close">&times;</span>
+
+					<form action="./homeSortFilterStates/homeSortPrice.html">
+						<div class="sort-filter">
+							<label>Sort</label>
+						</div>
+
+						<div>
+							<input type="checkbox" name="sort-price">
+							<label for="sort-price">Sort By Price</label>
+						</div>
+						<div>
+							<input type="checkbox" name="sort-rating">
+							<label for="sort-rating">Sort By Rating</label>
+						</div>
+
+						<div class="sort-filter">
+							<label>Filter</label>
+						</div>
+
+						<div>
+							<label for="location">Location:</label><br>
+							<select name="location" id="location" class="chosen-select">
+								<option value="Brampton">Brampton</option>
+								<option value="Hamilton">Hamilton</option>
+								<option value="Kitchener">Kitchener</option>
+								<option value="London">London</option>
+								<option value="Markham">Markham</option>
+								<option value="Mississauga">Mississauga</option>
+								<option value="Ottawa">Ottawa</option>
+								<option value="Toronto">Toronto</option>
+								<option value="Vaughan">Vaughan</option>
+								<option value="Windsor">Windsor</option>
+							</select>
+						</div>
+						<div>
+							<label for="filter-guests">Number Of Guests</label><br>
+							<select name="num-guests" id="num-guests" class="chosen-select">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+						<div>
+							<label for="filter-amenities">Amenities</label><br>
+							<select name="amenities" id="amenities" class="chosen-select" multiple>
+								<option value="high-quality-tv">4K TV</option>
+								<option value="first-aid">First Aid Kit</option>
+								<option value="hair-dryer">Hair Dryer</option>
+								<option value="internet">High-Speed Internet</option>
+								<option value="workspace">Working Space</option>
+							</select>
+						</div>
+						<div>
+							<label for="filter-availability">Availability</label><br>
+							<input type="date" name="filter-availability-start">
+							<input type="date" name="filter-availability-end">
+						</div>
+
+						<button>Apply</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="cards-grid">
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Massive Lodge With Tall Trees</b></h4>
+							<div class="card-pricing-rating">
+								<span>$712/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.05/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Cool Lodge With A Lakeside View</b></h4>
+							<div class="card-pricing-rating">
+								<span>$791/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.25/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Modern Lodge With Mountain Scenery</b></h4>
+							<div class="card-pricing-rating">
+								<span>$111/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 3.01/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Spacious Lodge With Bear Waiters</b></h4>
+							<div class="card-pricing-rating">
+								<span>$173/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 2.95/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Private Lodge Retreat!</b></h4>
+							<div class="card-pricing-rating">
+								<span>$182/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.65/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="./editListing.html">
+						<img src="../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>We Have Running Water!</b></h4>
+							<div class="card-pricing-rating">
+								<span>$67/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 2.02/5</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- JS Scripts -->
+	<script type="text/javascript" src="../js/filter.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+.update-listing-form {
+    display: grid;
+    gap: 10px;
+    width: 40vw;
+    grid-template-areas: "label-listing-name listing-name listing-name"
+                         "label-price price price"
+                         "label-num-bedrooms num-bedrooms num-bedrooms"
+                         "label-num-bathrooms num-bathrooms num-bathrooms"
+                         "label-description description description"
+                         "label-images images images"
+                         "buttons buttons buttons";
+    text-align: right;
+}
+@media screen and (max-width: 750px) {
+    .update-listing-form {
+        width: 80vw;
+    }
+}
+
+.label-listing-name {
+    grid-area: label-listing-name;
+}
+
+.label-price {
+    grid-area: label-price;
+}
+
+.label-num-bedrooms {
+    grid-area: label-num-bedrooms;
+}
+
+.label-num-bathrooms {
+    grid-area: label-num-bathrooms;
+}
+
+.label-description {
+    grid-area: label-description;
+}
+
+.label-images {
+    grid-area: label-images;
+}
+
+.listing-name {
+    grid-area: listing-name;
+}
+
+.price {
+    grid-area: price;
+}
+
+.num-bedrooms {
+    grid-area: num-bedrooms;
+}
+
+.num-bathrooms {
+    grid-area: num-bathrooms;
+}
+
+.description {
+    grid-area: description;
+}
+
+.images {
+    grid-area: images;
+}
+
+#edit-listing-container {
+    width: 100%;
+}
+
+#content-edit-listing {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-buttons button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+}
+.form-buttons button:hover {
+    cursor: pointer;
+}
+.cancel-button:hover {
+    background-color: red;
+}
+
+.save-button:hover {
+    background-color: green;
+}

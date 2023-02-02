@@ -19,6 +19,7 @@
 @import "editProfile.css";
 @import "manageReservations.css";
 @import "notifications.css";
+@import "editListing.css";
 
 :root {
     --main-bg-colour: #CCC2A0;
