@@ -21,7 +21,8 @@ __Property creation & administration__
 6. As a host, I can edit the general information of my rental properties and add/remove pictures to them.
 7. As a host, I can approve or deny pending reservation requests and cancellation request from the user.
 8. As a host, I can terminate existing reservations to my property at any time.
-Property info & search
+
+__Property info & search__
 9. As a user, I want to search through rental properties by their location, number of guests, amenities provided, and availability on certain dates. I should be able to order search results by price or rating.
 10. As a user, I can select a property and move to its property detail page, where I can see its general information, images, and comments.
 11. As a user, I can see the contact information of the host on the property detail page, e.g., so that I can ask about their properties through email or phone.

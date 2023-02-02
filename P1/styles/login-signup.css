@@ -105,9 +105,9 @@
 }
 
 .login-signup-submit input {
-    background: #3498db;
-    border: 1px solid #2691d9;
-    color: white;
+    background: var(--main-bg-colour);
+    border: 1px solid var(--main-accent-colour);
+    color: var(--main-accent-colour);
     cursor: pointer;
     font-family: 'Open Sans', sans-serif;
     font-size: 1.2rem;
@@ -119,7 +119,9 @@
 }
 
 .login-signup-submit input:hover {
-    background: #2691d9;
+    background: var(--main-accent-colour);
+    border: 1px solid var(--main-bg-colour);
+    color: var(--main-bg-colour);
 }
 
 .no-account {
