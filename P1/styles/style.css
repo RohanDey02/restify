@@ -1,7 +1,7 @@
 /*
  * style.css
  *
- * CSC309 Project - Rohan Dey and Hamoon Zamiri
+ * CSC309 Project - Rohan Dey, Hamoon Zamiri and Ahsan Saeed
  * Winter 2023
  *
  */
@@ -17,6 +17,7 @@
 @import "login-signup.css";
 @import "reservation.css";
 @import "editProfile.css";
+@import "manageListings.css";
 
 :root {
     --main-bg-colour: #CCC2A0;
