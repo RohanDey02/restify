@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="./home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="../accountUser.html">Account Settings</a>
+					<a href="../notificationsUser.html">Notifications</a>
+					<a href="../reservationStates/reservation.html">Your Reservations</a>
+					<a href="../login.html">Sign Out</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<div class="content">
+            <div class="section-title">
+                <h2>Reservations</h2>
+                <p style="font-weight: 700;">John Smith,</p>
+                <p>johnsmith@gmail.com</p>
+            </div>
+            <h3>Pending Reservations</h3>
+
+			<!-- Modal Current Reservation -->
+			<div class="curr-card-modal">
+				<div class="res-modal-content">
+					<span class="modal-close">&times;</span>
+					<h4><b>Massive Lodge With Tall Trees</b></h4>
+                    <h4>Attendee: John Doe</h4>
+                    <h4>Email: john.doe@mail.com</h4>
+                    <span class="fa fa-star"></span>
+                    <span> - 4.90/5</span>
+					<p>2023-01-19 - 2023-01-22</p>
+					<p>$712/night x 3 nights</p>
+					<p>Total: $2136</p>
+					<a href=".../listing.html">
+						<button style="cursor: pointer;">View Original Listing</button>
+					</a>
+                    <div class="accept-reject">
+                        <button style="cursor: pointer;">Reject</button>
+                        <button style="cursor: pointer;">Accept</button>
+                    </div>
+				</div>
+			</div>
+
+            <!-- Pending Reservations -->
+            <div class="cards-grid">
+                <div id="curr-res" class="card">
+					<img src="../../assets/lodge.jpg" style="width:100%">
+					<div class="card-container">
+						<h4><b>Massive Lodge With Tall Trees</b></h4>
+						<div class="card-pricing-rating">
+							<span>$712/night</span>
+							<div>
+								<span class="fa fa-star"></span>
+								<span> - 4.05/5</span>
+							</div>
+						</div>
+						<h4 style="color: lightcoral;">Status: Pending</h4>
+					</div>
+				</div>
+            </div>
+
+            <h3>Past Reservations</h3>
+            <div class="cards-grid">
+                <div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Cool Lodge With A Lakeside View</b></h4>
+							<div class="card-pricing-rating">
+								<span>$791/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.25/5</span>
+								</div>
+							</div>
+                            <h4 style="color: green;">Status: Completed</h4>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Modern Lodge With Mountain Scenery</b></h4>
+							<div class="card-pricing-rating">
+								<span>$111/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 3.01/5</span>
+								</div>
+							</div>
+                            <h4 style="color: green;">Status: Completed</h4>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Spacious Lodge With Bear Waiters</b></h4>
+							<div class="card-pricing-rating">
+								<span>$173/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 2.95/5</span>
+								</div>
+							</div>
+                            <h4 style="color: green;">Status: Completed</h4>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>Private Lodge Retreat!</b></h4>
+							<div class="card-pricing-rating">
+								<span>$182/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 4.65/5</span>
+								</div>
+							</div>
+                            <h4 style="color: red;">Status: Expired</h4>
+						</div>
+					</a>
+				</div>
+				<div class="card">
+					<a href="../listing.html">
+						<img src="../../assets/lodge.jpg" style="width:100%">
+						<div class="card-container">
+							<h4><b>We Have Running Water!</b></h4>
+							<div class="card-pricing-rating">
+								<span>$67/night</span>
+								<div>
+									<span class="fa fa-star"></span>
+									<span> - 2.02/5</span>
+								</div>
+							</div>
+                            <h4 style="color: red;">Status: Denied</h4>
+						</div>
+					</a>
+				</div>
+            </div>
+		</div>
+	</div>
+	<!-- JS Scripts -->
+	<script type="text/javascript" src="../../js/reservation.js"></script>
+</body>
+
+</html>
