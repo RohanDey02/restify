@@ -1,9 +1,11 @@
 #rating-content {
     display: grid;
+    gap: 10px;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     justify-items: center;
-    width: 100vw;
-    gap: 10px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: calc(100vw - 1rem);
 }
 
 .label-input-pair {
@@ -25,7 +27,6 @@ label {
     justify-content: center;
 }
 
-
 .rating-form button:hover {
     cursor: pointer;
     background-color: var(--main-accent-colour);
@@ -46,4 +47,10 @@ label {
 .listing-details p, .listing-details h4 {
     padding: 0px;
     margin: 0px;
+}
+
+@media (max-width: 500px) {
+    .label-input-pair textarea {
+        width: 300px;
+    }
 }
