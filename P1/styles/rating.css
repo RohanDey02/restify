@@ -1,0 +1,49 @@
+#rating-content {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-items: center;
+    width: 100vw;
+    gap: 10px;
+}
+
+.label-input-pair {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-input-pair textarea {
+    height: 40vh;
+    width: 40vw;
+}
+
+label {
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+
+.rating-form button:hover {
+    cursor: pointer;
+    background-color: var(--main-accent-colour);
+    color: white;
+}
+.rating-form button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.listing-details p, .listing-details h4 {
+    padding: 0px;
+    margin: 0px;
+}

@@ -20,6 +20,7 @@
 @import "manageReservations.css";
 @import "notifications.css";
 @import "editListing.css";
+@import "rating.css";
 
 :root {
     --main-bg-colour: #CCC2A0;

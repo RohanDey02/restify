@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restify</title>
+	<link rel="stylesheet" href="../../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="../home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="../accountUser.html">Account Settings</a>
+					<a href="../notificationsUser.html">Notifications</a>
+					<a href="../reservationStates/reservation.html">Your Reservations</a>
+					<a href="../login.html">Sign Out</a>
+				</div>
+			</div>
+        </header>
+
+		<div id="rating-content" class="content">
+            <div class="section-title">
+                <h2>Review Your Stay At <a href="../listing.html">Massive Lodge With Tall Trees</a></h2>
+                <p style="font-weight: 700;">John Smith,</p>
+                <p>johnsmith@gmail.com</p>
+            </div>
+            <div class="listing-details">
+                <h4>Details About The Property</h4>
+				<p>8 guests - 4 bedrooms, 3 bathrooms</p>
+                <p>$712/night - Hosted By: Mark Zuckerberg</p>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span> - 4.05/5</span>
+            </div>
+            <form class="rating-form">
+                <div class="label-input-pair">
+                    <label>Rate Your Stay: <span><output id="value"></output>/5</span></label>
+
+                    <input id="rate-input" type="range" min="0" max="5">
+                </div>
+                <div class="label-input-pair">
+                    <label>Comments:</label>
+                    <textarea></textarea>
+                </div>
+                <div class="button-container">
+                    <button>Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../js/rating.js"></script>
+
+</body>
+</html>
