@@ -25,7 +25,7 @@ document.getElementsByClassName("notification-expand")[5].onclick = () => {
 };
 
 document.getElementsByClassName("notification-expand")[6].onclick = () => {
-    modal.style.display = "block";
+    window.location.href = "../src/addFollowupComment.html";
 };
 
 document.getElementsByClassName("notification-expand")[7].onclick = () => {
