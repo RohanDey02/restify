@@ -10,7 +10,7 @@
 	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="edit-profile-container" class="page-container">
+    <div id="edit-listing-container" class="page-container">
 		<!-- Header -->
 		<header>
 			<a href="./home.html" class="logo">
@@ -27,29 +27,32 @@
 				<div class="dropdown-content">
 					<a href="./accountUser.html">Account Settings</a>
 					<a href="./notificationsUser.html">Notifications</a>
-					<a href="./reservationStates/reservation.html">Your Reservations</a>
+					<a href="./reservation.html">Your Reservations</a>
 					<a href="./login.html">Sign Out</a>
 				</div>
 			</div>
 		</header>
 
-        <div id="content-edit-profile" class="content">
-            <h1>Edit Profile</h1>
-            <form class="update-profile-form">
-                <label class="label-firstname">First Name: </label>
-                <input value="John" class="firstname" type="name">
+        <div id="content-edit-listing" class="content">
+            <h1>Add Listing</h1>
+            <form class="update-listing-form">
+                <label class="label-listing-name">Listing Name: </label>
+                <input value="" class="listing-name" type="name">
 
-                <label class="label-lastname">Last Name: </label>
-                <input value="Doe" class="lastname" type="name">
+                <label class="label-price">Price Per Night: </label>
+                <input value="" class="price" type="number">
 
-                <label class="label-email">Email: </label>
-                <input value="john.doe@mail.com" class="email" type="email">
+                <label class="label-num-bedrooms">Number of Bedrooms: </label>
+                <input value="" class="num-bedrooms" type="number">
 
-                <label class="label-avatar">Avatar: </label>
-                <input class="avatar" type="file">
+                <label class="label-num-bathrooms">Number of Bathrooms: </label>
+                <input value="" class="num-bathrooms" type="number">
 
-                <label class="label-phone">Phone Number: </label>
-                <input value="123-456-789" class="phone" type="tel">
+                <label class="label-description">Description: </label>
+                <textarea class="description" rows="10" cols="50"></textarea>
+
+                <label class="label-images">Images: </label>
+                <input class="images" type="file" multiple>
 
                 <div class="form-buttons">
                     <button class="cancel-button">Cancel</button>
