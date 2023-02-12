@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="edit-listing-container" class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="./home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="./accountUser.html">Account Settings</a>
+					<a href="./notificationsUser.html">Notifications</a>
+					<a href="./reservation.html">Your Reservations</a>
+					<a href="./login.html">Sign Out</a>
+				</div>
+			</div>
+		</header>
+
+        <div id="content-edit-listing" class="content">
+            <div class="section-title">
+                <h2>Modify Your Reservation At <a href="./listing.html">Massive Lodge With Tall Trees</a></h2>
+                <p style="font-weight: 700;">John Smith,</p>
+                <p>johnsmith@gmail.com</p>
+            </div>
+
+            <div class="listing-details" style="margin-bottom: 1rem;">
+                <h4>Details About The Property</h4>
+                <p>8 guests - 4 bedrooms, 3 bathrooms</p>
+                <p>$712/night - Hosted By: Mark Zuckerberg</p>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span> - 4.05/5</span>
+            </div>
+
+            <form action="./reservationStates/reservationUserPending.html" class="modify-reservation-form">
+                <label class="label-check-in">Check-in: </label>
+                <input class="check-in" type="date" value="2023-01-19">
+                
+                <label class="label-check-out">Check-out: </label>
+                <input class="check-out" type="date" value="2023-01-22">
+
+                <label class="label-num-guests">Number of Guests: </label>
+                <input value="3" class="num-guests" type="number">
+
+                <label class="label-price">Price Per Night: </label>
+                <input value="712" class="price" type="number">
+
+                <div class="form-buttons">
+                    <button class="cancel-button">Cancel</button>
+                    <button class="save-button">Send Request</button>
+                </div>
+            </form>
+        </div>
+</body>

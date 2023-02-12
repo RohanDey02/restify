@@ -22,6 +22,7 @@
 @import "editListing.css";
 @import "rating.css";
 @import "comment.css";
+@import "modifyReservation.css";
 
 :root {
     --main-bg-colour: #CCC2A0;

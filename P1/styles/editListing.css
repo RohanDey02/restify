@@ -11,6 +11,7 @@
                          "buttons buttons buttons";
     text-align: right;
 }
+
 @media screen and (max-width: 750px) {
     .update-listing-form {
         width: 80vw;
@@ -97,10 +98,13 @@
 .form-buttons button:hover {
     cursor: pointer;
 }
+
 .cancel-button:hover {
     background-color: red;
+    color: white;
 }
 
 .save-button:hover {
     background-color: green;
+    color: white;
 }

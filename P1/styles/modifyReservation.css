@@ -1,0 +1,82 @@
+.modify-reservation-form {
+    display: grid;
+    gap: 10px;
+    width: 40vw;
+    grid-template-areas: "label-check-in check-in check-in"
+                         "label-check-out check-out check-out"
+                         "label-num-guests num-guests num-guests"
+                         "label-price price price"
+                         "buttons buttons buttons";
+    text-align: right;
+}
+
+@media screen and (max-width: 750px) {
+    .modify-reservation-form {
+        width: 80vw;
+    }
+}
+
+.label-check-in {
+    grid-area: label-check-in;
+}
+
+.label-check-out {
+    grid-area: label-check-out;
+}
+
+.label-num-guests {
+    grid-area: label-num-guests;
+}
+
+.label-price {
+    grid-area: label-price;
+}
+
+.check-in {
+    grid-area: check-in;
+}
+
+.check-out {
+    grid-area: check-out;
+}
+
+.num-guests {
+    grid-area: num-guests;
+}
+
+.price {
+    grid-area: price;
+}
+
+#edit-listing-container {
+    width: 100%;
+}
+
+#content-edit-listing {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-buttons button {
+    background-color: var(--main-bg-colour);
+    border: 2px solid var(--main-accent-colour);
+    border-radius: 5px;
+    color: var(--main-accent-colour);
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+}
+.form-buttons button:hover {
+    cursor: pointer;
+}
