@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Restify</title>
+	<link rel="stylesheet" href="../styles/style.css">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/2a96e8157c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="page-container">
+		<!-- Header -->
+		<header>
+			<a href="./home.html" class="logo">
+				<span class="fa-solid fa-house"></span>
+				<span>Restify</span>
+			</a>
+
+			<div class="header-right">
+				<button class="dropdown-button">
+					<span class="fa-solid fa-bars" style="margin-left: 10px;"></span>
+					<span class="fa-solid fa-user" style="margin-right: 10px;"></span>
+				</button>
+
+				<div class="dropdown-content">
+					<a href="./accountHost.html">Account Settings</a>
+					<a href="./notificationsUser.html">Notifications</a>
+					<a href="./reservationStates/reservation.html">Your Reservations</a>
+					<a href="./login.html">Sign Out</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<div class="content">
+            <div style="text-align: center; width: calc(100vw - 2rem);">
+                <img src="../assets/UserIcon.png" alt="portrait" style="border-radius: 50%; height: 200px; width: 200px">
+                <h1 style="color: var(--main-accent-colour); margin-top: 0;">John Doe</h1>
+            </div>
+
+            <div class="section-title">
+                <h3>Comments:</h3>
+            </div>
+
+            <div class="comment-container">
+                <img src="../assets/UserIcon2.png" alt="Avatar" style="width:100%;">
+                <p>An absolute pleasure to host. You're welcome back anytime!</p>
+                <span class="time-left">February 11, 2023</span>
+            </div>
+
+            <div class="comment-container">
+                <img src="../assets/UserIcon3.png" alt="Avatar" style="width:100%;">
+                <p>Really enjoyed having you at my property. Thanks for reminding me why I love hosting!</p>
+                <span class="time-right">June 1, 2022</span>
+            </div>
+
+            <div class="comment-container">
+                <img src="../assets/UserIcon4.png" alt="Avatar" style="width:100%;">
+                <p>5-star review! Clean, quiet, communicative, and respectful. Couldn't ask for a better guest.</p>
+                <span class="time-right">December 29, 2022</span>
+            </div>
+
+            <div class="comment-container">
+                <img src="../assets/UserIcon.png" alt="Avatar" style="width:100%;">
+                <p>I have absolutely nothing negative to say about my boy John. He was an exemplary guest and I'd love to host him again.</p>
+                <span class="time-right">November 27, 2019</span>
+            </div>
+		</div>
+	</div>
+
+	<!-- JS Scripts -->
+	<script type="text/javascript" src="../js/filter.js"></script>
+</body>
+</html>
