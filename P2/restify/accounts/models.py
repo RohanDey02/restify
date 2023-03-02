@@ -68,7 +68,7 @@ class RestifyUser(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
     email = models.EmailField()
     phone_number = models.CharField(max_length=10, blank=True, null=True)
-    account_type = models.CharField(max_length=255)
+    account_type = models.CharField(max_length=255) # Backend endpoints would check account type.
     avatar = models.ImageField(upload_to="avatars/")
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # An admin user; non super-user
