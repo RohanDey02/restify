@@ -1,2 +1,3 @@
 __pycache__
 restify/db.sqlite3
+restify/media/*
