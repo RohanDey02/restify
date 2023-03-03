@@ -1,6 +1,9 @@
+from django.contrib.auth import authenticate, logout as logout_user
 from django.http.response import HttpResponse
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView
 from rest_framework import status
@@ -43,7 +46,7 @@ def user(request, username):
                 if request.user.username != user.username:
                     return Response({"message": "error", "details": "Cannot access another user"}, status=status.HTTP_403_FORBIDDEN)
 
-                return Response({
+                return Response({"message": "success", "data": {
                     'username': user.username,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
@@ -51,7 +54,7 @@ def user(request, username):
                     'phone_number': user.phone_number,
                     'account_type': user.account_type,
                     'avatar': user.avatar.url if user.avatar else None
-                })
+                }}, status=status.HTTP_200_OK)
             except:
                 return Response({"message": "error", "details": "Invalid user or user not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
@@ -72,7 +75,7 @@ def user_avatar(request, username):
     user = RestifyUser.objects.get(username=username)
     return HttpResponse(user.avatar, content_type="image/png")
 
-class UpdateAvatar(UpdateAPIView):
+class UpdateUser(UpdateAPIView):
     queryset = RestifyUser.objects.all()
     serializer_class = UpdateUserSerializer
     lookup_field = 'username'
@@ -108,9 +111,30 @@ class UpdateAvatar(UpdateAPIView):
         else:
             return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    if request.method == "POST":
+        try:  # TODO: Can I send token somehow instead of password? What about login without token?
+            user = authenticate(username=request.data['username'], password=request.data['password'])
+            token = AccessToken.for_user(user)
+            return Response({"message": "success", "data": {
+                'username': user.username,
+                'password': request.data['password'],
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'phone_number': user.phone_number,
+                'account_type': user.account_type,
+                'avatar': user.avatar.url if user.avatar else None
+            }, "token": str(token)}, status=status.HTTP_200_OK)
+        except KeyError:
+            return Response({"message": "error", "details": "Invalid username and password combination"}, status=status.HTTP_400_BAD_REQUEST)
 
-# Login -> Return user with token
-
-# Logout -> Remove token?
-
-# Refresh user token (get refresh token and refresh for specific user)
+@api_view(['GET'])
+def logout(request):
+    if request.user.is_authenticated:
+        logout_user(request)
+        return Response({"message": "success", "details": "User logged out successfully"}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "error", "details": "User is already logged out"}, status=status.HTTP_400_BAD_REQUEST)
