@@ -7,7 +7,7 @@ class Property(models.Model):
     location = models.CharField(max_length=255, blank=False, null=False)
     description = models.TextField(blank=False, null=False)
     max_number_of_guests = models.PositiveIntegerField(blank=False, null=False)
-    price = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], blank=False, null=False)
+    price = models.FloatField(validators=[MinValueValidator(0.0)], blank=False, null=False)
     amenities = models.TextField(null=False)
     host = models.ForeignKey(RestifyUser, on_delete=models.CASCADE, limit_choices_to={'account_type': 'Host'}) # Host can have multiple properties. Backend endpoints would check account type.
 

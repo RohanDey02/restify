@@ -89,6 +89,9 @@ class UpdateUser(UpdateAPIView):
                 if item not in ['email', 'phone_number', 'account_type', 'avatar', 'password', 'password2']:
                     return Response({"message": "error", "details": "Invalid key in body"}, status=status.HTTP_400_BAD_REQUEST)
 
+            if "avatar" in request.data.keys() and len(request.data.getlist("avatar")) != 1:
+                return Response({"message": "error", "details": "Avatar should not have multiple files"}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
             if serializer.is_valid():
                 user = serializer.save(kwargs['username'])
@@ -115,7 +118,7 @@ class UpdateUser(UpdateAPIView):
 @permission_classes([AllowAny])
 def login(request):
     if request.method == "POST":
-        try:  # TODO: Can I send token somehow instead of password? What about login without token?
+        try:
             user = authenticate(username=request.data['username'], password=request.data['password'])
             token = AccessToken.for_user(user)
             return Response({"message": "success", "data": {
