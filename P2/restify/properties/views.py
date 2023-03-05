@@ -23,7 +23,7 @@ class CreateProperty(APIView):
             return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-def all_properties(request):
+def all_host_properties(request):
     if request.user.is_authenticated:
         if request.user.account_type != "Host":
             return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -45,24 +45,44 @@ def all_properties(request):
         return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-def get_property(request):
+def all_properties(request):
     if request.user.is_authenticated:
-        if request.user.account_type != "Host":
-            return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            properties = request.user.property_set.all()
-            return Response({
-                "message": "success",
-                "data": [{
-                    'id': property.id,
-                    'title': property.title,
-                    'location': property.location,
-                    'description': property.description,
-                    'max_number_of_guests': property.max_number_of_guests,
-                    'price': property.price,
-                    'amenities': property.amenities
-                } for property in properties]
-            })
+        properties = Property.objects.all()
+        return Response({
+            "message": "success",
+            "data": [{
+                'id': property.id,
+                'title': property.title,
+                'location': property.location,
+                'description': property.description,
+                'max_number_of_guests': property.max_number_of_guests,
+                'price': property.price,
+                'amenities': property.amenities
+            } for property in properties]
+        })
+    else:
+        return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def get_property(request, id):
+    if request.user.is_authenticated:
+        try:
+            property = Property.objects.get(id=id)
+        except:
+            return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            "message": "success",
+            "data": {
+                'id': property.id,
+                'title': property.title,
+                'location': property.location,
+                'description': property.description,
+                'max_number_of_guests': property.max_number_of_guests,
+                'price': property.price,
+                'amenities': property.amenities
+            }
+        })
     else:
         return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -118,8 +138,23 @@ class UpdateProperty(UpdateAPIView):
         else:
             return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
+class DeleteProperty(APIView):
+    def delete(self, request, id):
+        if self.request.user.is_authenticated:
+            if self.request.user.account_type != "Host":
+                return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            property = Property.objects.get(id=id)
+            if self.request.user != property.host:
+                return Response({"message": "error", "details": "Cannot delete another host's property"}, status=status.HTTP_403_FORBIDDEN)
+
+            property.delete()
+            return Response({"message": "success", "details": "Property successfully deleted"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+
 # Create ✅
 # Get all of a user's properties ✅
 # Update ✅
 # Search w/ pagination, sort-by and filter -> GET Request
-# Deletion
+# Deletion ✅

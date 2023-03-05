@@ -44,7 +44,14 @@ def user(request, username):
             try:
                 user = RestifyUser.objects.get(username=username)
                 if request.user.username != user.username:
-                    return Response({"message": "error", "details": "Cannot access another user"}, status=status.HTTP_403_FORBIDDEN)
+                    return Response({"message": "success", "data": {
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'email': user.email,
+                        'phone_number': user.phone_number,
+                        'account_type': user.account_type,
+                        'avatar': user.avatar.url if user.avatar else None
+                    }}, status=status.HTTP_200_OK)
 
                 return Response({"message": "success", "data": {
                     'username': user.username,
@@ -120,6 +127,9 @@ def login(request):
     if request.method == "POST":
         try:
             user = authenticate(username=request.data['username'], password=request.data['password'])
+            if user == None:
+                return Response({"message": "error", "details": "Invalid username and password combination"}, status=status.HTTP_400_BAD_REQUEST)
+
             token = AccessToken.for_user(user)
             return Response({"message": "success", "data": {
                 'username': user.username,

@@ -21,7 +21,7 @@ class CreatePropertySerializer(ModelSerializer):
             location=self.validated_data['location'],
             description=self.validated_data['description'],
             max_number_of_guests=self.validated_data['max_number_of_guests'],
-            price=self.validated_data['price'],
+            price=round(self.validated_data['price'], 2),
             amenities=amenities,
             host=user
         )
@@ -86,7 +86,7 @@ class UpdatePropertySerializer(ModelSerializer):
             if price <= 0:
                 validation_errors['price'] = "Price must be > 0"
             else:
-                property.price = price
+                property.price = round(price, 2)
                 updated_fields.append('price')
 
         if amenities is not None:
