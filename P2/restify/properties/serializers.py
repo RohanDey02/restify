@@ -10,11 +10,15 @@ class CreatePropertySerializer(ModelSerializer):
         fields = ['title', 'location', 'description', 'max_number_of_guests', 'price', 'amenities']
 
     def save(self, user):
-        comma_seperated_pattern = re.compile(r"^[a-zA-Z0-9]{1,64}(?:,\s[a-zA-Z0-9]{1,64})*$")
+        comma_seperated_pattern = re.compile(r"^[a-zA-Z0-9]{1,64}(?:,[a-zA-Z0-9]{1,64})*$")
         amenities = self.validated_data['amenities']
 
         if comma_seperated_pattern.match(amenities) == None:
             raise ValidationError({"amenities": "Amenities is not formatted as a comma-seperated list"})
+        else:
+            amenities_list = amenities.split(",")
+            amenities_list.sort()
+            amenities = ",".join(amenities_list)
 
         property = Property(
             title=self.validated_data['title'],
@@ -90,12 +94,14 @@ class UpdatePropertySerializer(ModelSerializer):
                 updated_fields.append('price')
 
         if amenities is not None:
-            comma_seperated_pattern = re.compile(r"^[a-zA-Z0-9]{1,64}(?:,\s[a-zA-Z0-9]{1,64})*$")
+            comma_seperated_pattern = re.compile(r"^[a-zA-Z0-9]{1,64}(?:,[a-zA-Z0-9]{1,64})*$")
 
             if comma_seperated_pattern.match(amenities) == None:
                 validation_errors['amenities'] = "Amenities is not formatted as a comma-seperated list"
             else:
-                property.amenities = amenities
+                amenities_list = amenities.split(",")
+                amenities_list.sort()
+                property.amenities = ",".join(amenities_list)
                 updated_fields.append('amenities')
 
         property_image_objs = []
@@ -126,3 +132,8 @@ class UpdatePropertySerializer(ModelSerializer):
 
             property.save(update_fields=updated_fields)
             return property
+
+class SearchPropertySerializer(ModelSerializer):
+    class Meta:
+        model = Property
+        fields = '__all__'

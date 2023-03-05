@@ -1,12 +1,12 @@
-from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.decorators import api_view
-from rest_framework.generics import UpdateAPIView
-from properties.models import Property, PropertyImages
+from rest_framework.generics import ListAPIView, UpdateAPIView
+from properties.models import Property
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import CreatePropertySerializer, UpdatePropertySerializer
+from .serializers import CreatePropertySerializer, SearchPropertySerializer, UpdatePropertySerializer
+from .pagination import PropertySearchPagination
+import re
 
 class CreateProperty(APIView):
     def post(self, request):
@@ -153,8 +153,63 @@ class DeleteProperty(APIView):
         else:
             return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
-# Create ✅
-# Get all of a user's properties ✅
-# Update ✅
-# Search w/ pagination, sort-by and filter -> GET Request
-# Deletion ✅
+class PropertySearch(ListAPIView):
+    serializer_class = SearchPropertySerializer
+    pagination_class = PropertySearchPagination
+
+    def get_queryset(self):
+        property_objs = Property.objects.all()
+
+        # possible_filter_fields = ['amenities', 'location', 'max_number_of_guests', 'max_price', 'min_price', 'title']
+        possible_order_by_fields = ['asc', 'desc']
+        possible_sort_fields = ['id', 'title', 'location', 'max_number_of_guests', 'price']
+
+        # Filtering
+        amenities, location, max_number_of_guests, max_price, min_price, title = None, None, None, None, None, None
+        if self.request.GET.get("amenities", None) != None:
+            amenities = self.request.GET["amenities"]
+            comma_seperated_pattern = re.compile(r"^[a-zA-Z0-9]{1,64}(?:,[a-zA-Z0-9]{1,64})*$")
+
+            if comma_seperated_pattern.match(amenities) is not None:
+                amenities_query_list = amenities.split(",")
+                property_list = []
+
+                for elem in property_objs:
+                    amenities_list = elem.amenities.split(",")
+                    if all(item in amenities_list for item in amenities_query_list):
+                        property_list.append(elem.id)
+                
+                property_objs = property_objs.filter(id__in=property_list)
+                print(property_objs)
+        
+        if self.request.GET.get("location", None) != None:
+            location = self.request.GET["location"]
+            property_objs = property_objs.filter(location__contains=location)
+        
+        if self.request.GET.get("max_number_of_guests", None) != None:
+            max_number_of_guests = self.request.GET["max_number_of_guests"]
+            property_objs = property_objs.filter(max_number_of_guests__gte=max_number_of_guests)
+        
+        if self.request.GET.get("max_price", None) != None:
+            max_price = self.request.GET["max_price"]
+            property_objs = property_objs.filter(price__lte=max_price)
+        
+        if self.request.GET.get("min_price", None) != None:
+            min_price = self.request.GET["min_price"]
+            property_objs = property_objs.filter(price__gte=min_price)
+        
+        if self.request.GET.get("title", None) != None:
+            title = self.request.GET["title"]
+            property_objs = property_objs.filter(title__contains=title)
+
+        order_by_option = self.request.GET.get("order_by", None)
+        sort_option = self.request.GET.get("sort", None)
+
+        if order_by_option != None and order_by_option not in possible_order_by_fields:
+            order_by_option = None
+
+        if sort_option != None and sort_option in possible_sort_fields:
+            sort_by_str = sort_option if order_by_option is None or order_by_option == 'asc' else f"-{sort_option}"
+            property_objs = property_objs.order_by(sort_by_str)        
+
+        return property_objs
