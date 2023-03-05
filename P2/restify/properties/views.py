@@ -7,6 +7,8 @@ from rest_framework import status
 from .serializers import CreatePropertySerializer, SearchPropertySerializer, UpdatePropertySerializer
 from .pagination import PropertySearchPagination
 import re
+from datetime import datetime
+import pandas as pd
 
 class CreateProperty(APIView):
     def post(self, request):
@@ -143,7 +145,7 @@ class DeleteProperty(APIView):
         if self.request.user.is_authenticated:
             if self.request.user.account_type != "Host":
                 return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
-            
+
             property = Property.objects.get(id=id)
             if self.request.user != property.host:
                 return Response({"message": "error", "details": "Cannot delete another host's property"}, status=status.HTTP_403_FORBIDDEN)
@@ -160,7 +162,7 @@ class PropertySearch(ListAPIView):
     def get_queryset(self):
         property_objs = Property.objects.all()
 
-        # possible_filter_fields = ['amenities', 'location', 'max_number_of_guests', 'max_price', 'min_price', 'title']
+        # possible_filter_fields = ['amenities', 'location', 'max_number_of_guests', 'max_price', 'min_price', 'title', 'start_availability', 'end_availability']
         possible_order_by_fields = ['asc', 'desc']
         possible_sort_fields = ['id', 'title', 'location', 'max_number_of_guests', 'price']
 
@@ -178,29 +180,56 @@ class PropertySearch(ListAPIView):
                     amenities_list = elem.amenities.split(",")
                     if all(item in amenities_list for item in amenities_query_list):
                         property_list.append(elem.id)
-                
+
                 property_objs = property_objs.filter(id__in=property_list)
                 print(property_objs)
-        
+
         if self.request.GET.get("location", None) != None:
             location = self.request.GET["location"]
             property_objs = property_objs.filter(location__contains=location)
-        
+
         if self.request.GET.get("max_number_of_guests", None) != None:
             max_number_of_guests = self.request.GET["max_number_of_guests"]
             property_objs = property_objs.filter(max_number_of_guests__gte=max_number_of_guests)
-        
+
         if self.request.GET.get("max_price", None) != None:
             max_price = self.request.GET["max_price"]
             property_objs = property_objs.filter(price__lte=max_price)
-        
+
         if self.request.GET.get("min_price", None) != None:
             min_price = self.request.GET["min_price"]
             property_objs = property_objs.filter(price__gte=min_price)
-        
+
         if self.request.GET.get("title", None) != None:
             title = self.request.GET["title"]
             property_objs = property_objs.filter(title__contains=title)
+
+        if self.request.GET.get("start_availability", None) != None and self.request.GET.get("end_availability", None) != None:
+            try:
+                start_availability = datetime.strptime(self.request.GET["start_availability"], "%m/%d/%Y").date()
+                end_availability = datetime.strptime(self.request.GET["end_availability"], "%m/%d/%Y").date()
+
+                # If in the past or if end date is before start date
+                if start_availability < datetime.now().date() or end_availability < start_availability:
+                    raise ValueError()
+
+                # Generate all dates between start and end
+                date_range_query = list(map(lambda dt: dt.date(), pd.date_range(start=start_availability,end=end_availability).to_pydatetime().tolist()))
+
+                # Get properties that are available within these dates
+                properties_to_be_dropped = []
+
+                for elem in property_objs:
+                    all_reservations = elem.reservation_set.all()
+                    for reservation in all_reservations:
+                        date_range = list(map(lambda dt: dt.date(), pd.date_range(start=reservation.start_date,end=reservation.end_date).to_pydatetime().tolist()))
+                        if not set(date_range_query).isdisjoint(date_range):
+                            properties_to_be_dropped.append(elem.id)
+                            break
+
+                property_objs = property_objs.exclude(id__in=properties_to_be_dropped)
+            except:
+                pass
 
         order_by_option = self.request.GET.get("order_by", None)
         sort_option = self.request.GET.get("sort", None)
@@ -210,6 +239,6 @@ class PropertySearch(ListAPIView):
 
         if sort_option != None and sort_option in possible_sort_fields:
             sort_by_str = sort_option if order_by_option is None or order_by_option == 'asc' else f"-{sort_option}"
-            property_objs = property_objs.order_by(sort_by_str)        
+            property_objs = property_objs.order_by(sort_by_str)
 
         return property_objs
