@@ -210,7 +210,7 @@ class PropertySearch(ListAPIView):
                 end_availability = datetime.strptime(self.request.GET["end_availability"], "%m/%d/%Y").date()
 
                 # If in the past or if end date is before start date
-                if start_availability < datetime.now().date() or end_availability < start_availability:
+                if start_availability < datetime.now().date() or end_availability <= start_availability:
                     raise ValueError()
 
                 # Generate all dates between start and end

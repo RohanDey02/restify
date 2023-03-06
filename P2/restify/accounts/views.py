@@ -22,6 +22,9 @@ class CreateAccount(APIView):
 def all_users(request, acc_type):
     if request.user.is_authenticated:
         users = RestifyUser.objects.filter(account_type=acc_type.capitalize())
+        if len(users) == 0:
+            return Response({"message": "error", "details": "No users found"}, status=status.HTTP_404_NOT_FOUND)
+
         return Response({
             "message": "success",
             "data": [{

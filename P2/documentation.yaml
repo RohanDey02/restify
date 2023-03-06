@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: Restify
+  description: |-
+    Documentation with a full list of API endpoints, a short description, their methods, and the payloads.
+  version: 1.0.0
+tags:
+  - name: api
+    description: SimpleJWT Token Authentication
+  - name: accounts
+    description: Operations about the Restify User accounts
+  - name: comments
+    description: Operations about Restify Comments
+  - name: notifications
+    description: Operations about Restify Notifications
+  - name: property
+    description: Operations about Restify Properties
+  - name: reservations
+    description: Operations about Restify Reservations
+servers:
+  - url: http://127.0.0.1
+paths:
+  /api/token/:
+    post:
+      tags:
+        - api
+      summary: Get an authenticated user's token for authentication
+      description: Get an authenticated user's token for authentication
+      requestBody:
+        description: Get an authenticated user's token for authentication
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        required: True
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  refresh:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3ODE0NzU1MSwiaWF0IjoxNjc4MDYxMTUxLCJqdGkiOiI0NjVhYzE0N2Y4YjU0ZmE4Yjc5NWRiZTUwNjhlMzMwMiIsInVzZXJfaWQiOjF9.vsSMyM-hwcyuOCQ7uEjGqSCVZhu32G6RxuSc5FEblW8"
+                  active:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "No active account found with the given credentials"
+  /api/token/refresh/:
+    post:
+      tags:
+        - api
+      summary: Refresh an user's token for authentication
+      description: Refresh an user's token for authentication
+      requestBody:
+        description: Refresh an user's token for authentication. Can optionally also pass in access token.
+        content:
+          application/json:
+            schema:
+              properties:
+                refresh:
+                  type: string
+        required: True
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  active:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
+  
+  /accounts/{acc_type}/all/:
+    get:
+      tags:
+        - accounts
+      summary: Get all users of type acc_type
+      description: Get all users of type acc_type
+      parameters:
+        - name: acc_type
+          in: path
+          description: The account type. Must be one of User or Host (casing does not matter).
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: "TestUser"
+                        first_name:
+                          type: string
+                          example: "First"
+                        last_name:
+                          type: string
+                          example: "Last"
+                        email:
+                          type: string
+                          example: "test@gmail.com"
+                        phone_number:
+                          type: string
+                          example: "4169997777"
+                        account_type:
+                          type: string
+                          example: "Host"
+                        avatar:
+                          type: string
+                          example: "/media/avatars/me.png"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "No users found"
+
+components:
+  schemas:
+    Comment:
+      type: object
+      description: Followup comments after a reservation
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        message:
+          type: string
+          example: Thanks for the followup! I had a great time at X.
+        sender_type:
+          type: string
+          enum:
+            - Property
+            - User
+        last_modified:
+          type: string
+          description: Gets set to current time
+          format: timestamp
+          example: 2023-03-05 18:21:25
+    Feedback:
+      type: object
+      description: The feedback after a reservation
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        user_rating:
+          type: number
+          description: Between 0 to 5
+          example: 4.0
+        property_rating:
+          type: number
+          description: Between 0 to 5
+          example: 4.0
+        comments:
+          type: object
+          description: Foreign key (1-N) to the Comments class. A Feedback class can many Comments.
+          example: <Comment id=1>
+    Notifications:
+      type: object
+      description: The notification system
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: Jack left a comment on his reservation at 'The Lodge'.
+          example: 
+        description:
+          type: string
+          example: Click here to read Jack's comment.
+        url:
+          type: string
+          example: http://127.0.0.1/notification-1.html/
+        status:
+          type: string
+          enum:
+            - Cleared
+            - Read
+            - Unread
+        user:
+          type: object
+          description: Foreign key (Only 1) to the RestifyUser class with a user whose account type is User.
+          example: <User id=2>
+        host:
+          type: object
+          description: Foreign key (Only 1) to the RestifyUser class with a user whose account type is Host.
+          example: <User id=8>
+    Property:
+      type: object
+      description: The Restify properties
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: string
+          example: The Lodge
+        location:
+          type: string
+          example: Toronto
+        description:
+          type: string
+          example: Generic description of the property.
+        max_number_of_guests:
+          type: integer
+          description: Must be greater than 0.
+          example: 7
+        price:
+          type: number
+          description: The nightly price. Must be greater than 0.
+          example: 42.76
+        amenities:
+          type: string
+          description: Comma-seperated string with no spaces in between.
+          example: Balcony,Lake,Outdoor Shower
+        host:
+          type: object
+          description: Foreign key (Only 1-N) to the RestifyUser class with a user whose account type is Host. A Host can have multiple properties.
+          example: <User id=8>
+    PropertyImages:
+      type: object
+      description: The Restify Property images
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        property:
+          type: object
+          description: Foreign key (Only 1-N) to the Property class. A Property can have multiple images.
+          example: <Property id=5>
+        image:
+          type: object
+          example: media/test.png
+    Reservation:
+      type: object
+      description: The Restify Property reservations
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        start_date:
+            type: string
+            description: The start date of the reservation. Earliest date is current date.
+            format: date
+            example: 2023-03-05
+        end_date:
+            type: string
+            description: The end date of the reservation. Earliest date is the day after the start date.
+            format: date
+            example: 2023-03-08
+        status:
+          type: string
+          enum:
+            - Pending
+            - Denied
+            - Expired
+            - Approved
+            - Canceled
+            - Terminated
+            - Completed
+        feedback:
+          type: object
+          description: One-to-One field to the Feedback class. Can initially be empty.
+          example: <Feedback id=2>
+        user:
+          type: object
+          description: Foreign key (1-N) to the RestifyUser class with a user whose account type is User. RestifyUser can have multiple reservations.
+          example: <RestifyUser id=2>
+        property:
+          type: object
+          description: Foreign key (1-N) to the Property class. Property can have multiple reservations.
+          example: <Property id=7>
+    RestifyUser:
+      type: object
+      description: The authenticated User model
+      properties:
+        id:
+          type: integer
+          description: Unique ID
+          format: int64
+          example: 10
+        username:
+          type: string
+          description: Username used as a unique ID
+          example: TestUser
+        first_name:
+          type: string
+          example: Test
+        last_name:
+          type: string
+          example: User
+        email:
+          type: string
+          format: email
+          example: testuser@gmail.com
+        phone_number:
+          type: string
+          example: 4169997777
+        account_type:
+          type: string
+          enum:
+            - Host
+            - User
+        avatar:
+          type: object
+          example: media/test.png
+        is_active:
+          type: boolean
+          example: True
+        staff:
+          type: boolean
+          example: True
+        admin:
+          type: boolean
+          example: True
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
