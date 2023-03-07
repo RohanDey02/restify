@@ -12,8 +12,9 @@ class CreateUserSerializer(ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def save(self):
-        phone_number=self.validated_data['phone_number'],
+    def save(self, password2):
+        validation_errors = {}
+        phone_number=self.validated_data['phone_number']
         account_type=self.validated_data['account_type']
 
         user = RestifyUser(
@@ -25,16 +26,22 @@ class CreateUserSerializer(ModelSerializer):
             last_name=self.validated_data['last_name']
         )
 
-        if len(phone_number[0]) < 10:
-            raise ValidationError({'phone_number': 'Phone number must be 10 digits long'})
+        if len(phone_number) != 10:
+            validation_errors['phone_number'] = 'Phone number must be 10 digits long'
 
         if account_type not in ["User", "Host"]:
-            raise ValidationError({'account_type': 'Account type must be either User or Host'})
+            validation_errors['account_type'] = 'Account type must be either User or Host'
 
         password = self.validated_data['password']
-        
+        if password2 == None:
+            validation_errors['password2'] = 'Verify Password not specified'
+        if password != password2:
+            validation_errors['password'] = 'Password does not match Password2'
         if len(password) < 8:
-            raise ValidationError({'password': 'Password must be at least 8 characters long'})
+            validation_errors['password'] = 'Password must be at least 8 characters long'
+
+        if validation_errors != {}:
+            raise ValidationError(validation_errors)
 
         user.set_password(password)
         user.save()

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Restify
   description: |-
-    Documentation with a full list of API endpoints, a short description, their methods, and the payloads.
+    Documentation with a full list of API endpoints, a short description, their methods, and the payloads. Note that the Simple JWT Token is required for each endpoint unless otherwise stated.
   version: 1.0.0
 tags:
   - name: api
@@ -20,6 +20,7 @@ tags:
 servers:
   - url: http://127.0.0.1
 paths:
+  # API Endpoints
   /api/token/:
     post:
       tags:
@@ -51,14 +52,17 @@ paths:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
         '401':
-          description: Unauthorized operation
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
           content:
             application/json:
               schema:
                 properties:
                   detail:
                     type: string
-                    example: "No active account found with the given credentials"
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
   /api/token/refresh/:
     post:
       tags:
@@ -85,7 +89,7 @@ paths:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
         '401':
-          description: Unauthorized operation
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
           content:
             application/json:
               schema:
@@ -97,6 +101,7 @@ paths:
                     type: string
                     example: "token_not_valid"
   
+  # Accounts Endpoints
   /accounts/{acc_type}/all/:
     get:
       tags:
@@ -171,6 +176,720 @@ paths:
                     type: string
                     example: "No users found"
 
+  /accounts/create:
+    post:
+      tags:
+        - accounts
+      summary: Create a user
+      description: Create a user
+      requestBody:
+        description: Create a user
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: string | Unique
+                password:
+                  type: string
+                  example: string | Must must password2 | Must be > 8 characters
+                password2:
+                  type: string
+                  example: string | Must must password | Must be > 8 characters
+                email:
+                  type: string
+                  format: email
+                phone_number:
+                  type: string
+                  example: string | Must be 10 characters
+                account_type:
+                  type: string
+                  example: string | Must be either User or Host
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+        required: True
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: "TestUser"
+                        email:
+                          type: string
+                          example: "test@gmail.com"
+                        phone_number:
+                          type: string
+                          example: "4169997777"
+                        account_type:
+                          type: string
+                          example: "Host"
+                        first_name:
+                          type: string
+                          example: "First"
+                        last_name:
+                          type: string
+                          example: "Last"
+        '400':
+          description: Bad request operation (Error messages differ given validation error)
+          content:
+            application/json:
+              schema:
+                properties:
+                  password:
+                    type: string
+                    example: "Password does not match Password2"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  details:
+                    type: string
+                    example: "Authentication credentials were not provided."
+      
+  /accounts/login:
+    post:
+      tags:
+        - accounts
+      summary: Login user
+      description: Does not require authentication.
+      requestBody:
+        description: Login user
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        required: True
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: "TestUser"
+                        password:
+                          type: string
+                          example: "password123"
+                        first_name:
+                          type: string
+                          example: "First"
+                        last_name:
+                          type: string
+                          example: "Last"
+                        email:
+                          type: string
+                          example: "test@gmail.com"
+                        phone_number:
+                          type: string
+                          example: "4169997777"
+                        account_type:
+                          type: string
+                          example: "Host"
+                        avatar:
+                          type: string
+                          example: "/media/avatars/me.png"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
+        '400':
+          description: Bad request operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  password:
+                    type: string
+                    example: "Invalid username and password combination"
+
+  /accounts/logout:
+    get:
+      tags:
+        - accounts
+      summary: Logout user
+      description: Logout user
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  details:
+                    type: string
+                    example: "User logged out successfully"
+        '400':
+          description: Bad request operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is already logged out"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Given token not valid for any token type"
+                  code:
+                    type: string
+                    example: "token_not_valid"
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        token_class:
+                          type: string
+                          example: "AccessToken"
+                        token_type:
+                          type: string
+                          example: "access"
+                        message:
+                          type: string
+                          example: "Token is invalid or expired"
+
+  /accounts/{username}/:
+    get:
+      tags:
+        - accounts
+      summary: Get a user by username
+      description: Get a user by username
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      username: TestUser
+                      first_name: Test
+                      last_name: User
+                      email: testuser@gmail.com
+                      phone_number: "4169997777"
+                      account_type: User
+                      avatar: "media/avatar.png/"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Invalid user or user not found"
+    delete:
+      tags:
+        - accounts
+      summary: Delete a user by username
+      description: Delete a user by username
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  details:
+                    type: string
+                    example: "User has been successfully deleted"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '403':
+          description: Forbidden operation (Attempting to delete someone else's account)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Cannot delete another user"
+
+  /accounts/{username}/update/:
+    patch:
+      tags:
+        - accounts
+      summary: Update a user by username
+      description: Update a user by username
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user to be queried for.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Note - If password is provided, password2 must also be provided.
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: Optional[str]
+                phone_number:
+                  type: string
+                  example: Optional[str]
+                account_type:
+                  type: string
+                  example: Optional[str]
+                avatar:
+                  type: object
+                  example: Optional[ImageFile]
+                password:
+                  type: string
+                  example: Optional[str]
+                password2:
+                  type: string
+                  example: Optional[str]
+        required: True
+      responses:
+        '200':
+          description: Successful operation. Password will never be sent in request body containing updated fields.
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      email: testuser@gmail.com
+                      phone_number: "4169997777"
+                      avatar: "media/avatar.png/"
+        '400':
+          description: Bad request operation. Another potential message is "Avatar should not have multiple files".
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Invalid key in body"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '403':
+          description: Forbidden operation (Attempting to update someone else's account).
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Cannot edit another user's profile"
+  
+  /accounts/avatar/{username}/:
+    get:
+      tags:
+        - accounts
+      summary: Get an user's avatar by username
+      description: Get an user's avatar by username
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation. Does not return a JSON. Actually directly returns an image.
+          content:
+            image/png:
+              example: "media/image_url.png"
+        '400':
+          description: Bad request operation. Another potential message is "Avatar should not have multiple files".
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Invalid key in body"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '404':
+          description: Not found operation (Attempting to fetch a non-existent user's avatar). Likewise, if no avatar exists, then can also be "No avatar associated with user".
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Invalid user or user not found"
+
+  # Property Endpoints
+  /property/{id}/:
+    get:
+      tags:
+        - property
+      summary: Get the property by id
+      description: Get the property by id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the property to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      id: 5
+                      title: 'The Lodge'
+                      location: Toronto
+                      description: Big lodge with big potential.
+                      max_number_of_guests: 9
+                      price: 25.42
+                      amenities: "Pool,Kayaking,Lake"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property not found"
+
+  /property/{id}/update/:
+    patch:
+      tags:
+        - property
+        
+  /property/{id}/delete/:
+    delete:
+      tags:
+        - property
+
+  /property/create/:
+    post:
+      tags:
+        - property
+  
+  /property/all/:
+    get:
+      tags:
+        - property
+      summary: Get all properties (0 to N objects returned)
+      description: Get all properties (0 to N objects returned)
+      parameters:
+        - name: page
+          in: query
+          description: The page for the pagination query. Required if page_size is specified.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The page size for the pagination query. Not required.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  next:
+                    type: object
+                    example: null
+                  previous:
+                    type: object
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        title:
+                          type: string
+                          example: 'The Lodge'
+                        location:
+                          type: string
+                          example: Toronto
+                        description:
+                          type: string
+                          example: Big lodge with big potential.
+                        max_number_of_guests:
+                          type: integer
+                          example: 9
+                        price:
+                          type: number
+                          example: 25.42
+                        amenities:
+                          type: string
+                          example: "Pool,Kayaking,Lake"
+                        host:
+                          type: integer
+                          example: 1
+        '401':
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
+  
+  /property/allHostProperty/:
+    get:
+      tags:
+        - property
+      summary: Get all properties (0 to N objects returned)
+      description: Get all properties (0 to N objects returned)
+      parameters:
+        - name: page
+          in: query
+          description: The page for the pagination query. Required if page_size is specified.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The page size for the pagination query. Not required.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  next:
+                    type: object
+                    example: null
+                  previous:
+                    type: object
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        title:
+                          type: string
+                          example: 'The Lodge'
+                        location:
+                          type: string
+                          example: Toronto
+                        description:
+                          type: string
+                          example: Big lodge with big potential.
+                        max_number_of_guests:
+                          type: integer
+                          example: 9
+                        price:
+                          type: number
+                          example: 25.42
+                        amenities:
+                          type: string
+                          example: "Pool,Kayaking,Lake"
+                        host:
+                          type: integer
+                          example: 1
+        '400':
+          description: Bad request operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User that is not a Host has no properties"
+        '401':
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
+  
+  /property/search/:
+    get:
+      tags:
+        - property
+
 components:
   schemas:
     Comment:
@@ -223,8 +942,8 @@ components:
           format: int64
           example: 10
         title:
-          type: Jack left a comment on his reservation at 'The Lodge'.
-          example: 
+          type: string
+          example: Jack left a comment on his reservation at 'The Lodge'.
         description:
           type: string
           example: Click here to read Jack's comment.
@@ -376,34 +1095,3 @@ components:
         admin:
           type: boolean
           example: True
-  requestBodies:
-    Pet:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-    UserArray:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
-  securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header

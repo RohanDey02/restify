@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import CreatePropertySerializer, SearchPropertySerializer, UpdatePropertySerializer
-from .pagination import PropertySearchPagination
+from .pagination import HostPropertySearchPagination, PropertySearchPagination
 import re
 from datetime import datetime
 import pandas as pd
@@ -24,46 +24,12 @@ class CreateProperty(APIView):
         else:
             return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['GET'])
-def all_host_properties(request):
-    if request.user.is_authenticated:
-        if request.user.account_type != "Host":
-            return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            properties = request.user.property_set.all()
-            return Response({
-                "message": "success",
-                "data": [{
-                    'id': property.id,
-                    'title': property.title,
-                    'location': property.location,
-                    'description': property.description,
-                    'max_number_of_guests': property.max_number_of_guests,
-                    'price': property.price,
-                    'amenities': property.amenities
-                } for property in properties]
-            })
-    else:
-        return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+class AllHostProperties(ListAPIView):
+    serializer_class = SearchPropertySerializer
+    pagination_class = HostPropertySearchPagination
 
-@api_view(['GET'])
-def all_properties(request):
-    if request.user.is_authenticated:
-        properties = Property.objects.all()
-        return Response({
-            "message": "success",
-            "data": [{
-                'id': property.id,
-                'title': property.title,
-                'location': property.location,
-                'description': property.description,
-                'max_number_of_guests': property.max_number_of_guests,
-                'price': property.price,
-                'amenities': property.amenities
-            } for property in properties]
-        })
-    else:
-        return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+    def get_queryset(self):
+        return self.request.user.property_set.all()
 
 @api_view(['GET'])
 def get_property(request, id):
