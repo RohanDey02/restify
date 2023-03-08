@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, UpdateAPIView
-from properties.models import Property
+from properties.models import Property, PropertyImages
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -61,7 +61,14 @@ class UpdateProperty(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            property = Property.objects.get(id=kwargs['id'])
+            if self.request.user.account_type != "Host":
+                return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            try:
+                property = Property.objects.get(id=kwargs['id'])
+            except:
+                return Response({"message": "error", "details": f"Property with id: {kwargs['id']} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
             if self.request.user != property.host:
                 return Response({"message": "error", "details": "Cannot edit another host's property"}, status=status.HTTP_403_FORBIDDEN)
 
@@ -102,7 +109,7 @@ class UpdateProperty(UpdateAPIView):
 
                 return Response({"message": "success", "data": response}, status=status.HTTP_200_OK)
             else:
-                return Response({"message": "error", "details": serializer.errors})
+                return Response({"message": "error", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -112,9 +119,20 @@ class DeleteProperty(APIView):
             if self.request.user.account_type != "Host":
                 return Response({"message": "error", "details": "User that is not a Host has no properties"}, status=status.HTTP_401_UNAUTHORIZED)
 
-            property = Property.objects.get(id=id)
+            try:
+                property = Property.objects.get(id=id)
+            except:
+                return Response({"message": "error", "details": f"Property with id: {id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
             if self.request.user != property.host:
                 return Response({"message": "error", "details": "Cannot delete another host's property"}, status=status.HTTP_403_FORBIDDEN)
+
+            # Delete all property image files
+            property_images = property.propertyimages_set.all()
+            for image in property_images:
+                property_image_obj = PropertyImages.objects.get(id=image.id)
+                property_image_obj.image.delete(save=True)
+                property_image_obj.delete()
 
             property.delete()
             return Response({"message": "success", "details": "Property successfully deleted"}, status=status.HTTP_200_OK)

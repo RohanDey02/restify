@@ -104,31 +104,34 @@ class UpdatePropertySerializer(ModelSerializer):
                 property.amenities = ",".join(amenities_list)
                 updated_fields.append('amenities')
 
-        property_image_objs = []
-        if images is not None:
-            if not all([type(elem) == InMemoryUploadedFile for elem in images]):
-                validation_errors['images'] = "Not all images are files"
-            else:
-                # Delete current property images
-                property_images = property.propertyimages_set.all()
-                for image in property_images:
-                    property_image_obj = PropertyImages.objects.get(id=image.id)
-                    property_image_obj.image.delete(save=True)
-                    property_image_obj.delete()
-                
-                # Create new images and add them
-                for image in images:
-                    property_image_objs.append(PropertyImages(property=property, image=image))
-
-                updated_fields.append('images')
-
         if validation_errors != {}:
             raise ValidationError(validation_errors)
         else:
-            if 'images' in updated_fields:
-                for property_image_obj in property_image_objs:
-                    property_image_obj.save()
-                updated_fields.remove('images')
+            property_image_objs = []
+            if images is not None:
+                if not all([type(elem) == InMemoryUploadedFile for elem in images]):
+                    validation_errors['images'] = "Not all images are files"
+                else:
+                    # Delete current property images
+                    property_images = property.propertyimages_set.all()
+                    for image in property_images:
+                        property_image_obj = PropertyImages.objects.get(id=image.id)
+                        property_image_obj.image.delete(save=True)
+                        property_image_obj.delete()
+                    
+                    # Create new images and add them
+                    for image in images:
+                        property_image_objs.append(PropertyImages(property=property, image=image))
+
+                    updated_fields.append('images')
+
+            if validation_errors != {}:
+                raise ValidationError(validation_errors)
+            else:
+                if 'images' in updated_fields:
+                    for property_image_obj in property_image_objs:
+                        property_image_obj.save()
+                    updated_fields.remove('images')
 
             property.save(update_fields=updated_fields)
             return property
