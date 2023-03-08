@@ -320,8 +320,14 @@ paths:
                           type: string
                           example: "/media/avatars/me.png"
                   token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
+                    type: object
+                    properties:
+                      access:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4MTQ3NTUxLCJpYXQiOjE2NzgwNjExNTEsImp0aSI6ImUxZDRmMjY2NmNmYzRlOTQ5YzY4OWE0NGMzYTk3OGFiIiwidXNlcl9pZCI6MX0.hAc3sXuZMC_WikNPIUOb_kDz4iNWE7dehlmimeeDqx8"
+                      refresh:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3ODMxODI2OSwiaWF0IjoxNjc4MjMxODY5LCJqdGkiOiI2ODhiOGVjNzk3MTc0ODEzYjdlMTYxOWRlYmVhMzRjMCIsInVzZXJfaWQiOjR9.el9hP5e8yawhA4YhcuqsZ4OtgAEaXD3R1ukKLUiqY1Q"
         '400':
           description: Bad request operation
           content:
@@ -333,7 +339,7 @@ paths:
                     example: "Invalid username and password combination"
 
   /accounts/logout:
-    get:
+    post:
       tags:
         - accounts
       summary: Logout user
@@ -708,18 +714,277 @@ paths:
     patch:
       tags:
         - property
-        
+      summary: Update property and its images. Upon uploading images, all current images will be wiped.
+      description: Update property and its images. Upon uploading images, all current images will be wiped.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the property to be queried for.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update property and its images. Upon uploading images, all current images will be wiped.
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: Optional[str]
+                location:
+                  type: string
+                  example: Optional[str]
+                description:
+                  type: string
+                  example: Optional[str]
+                max_number_of_guests:
+                  type: integer
+                  example: Optional[int]
+                price:
+                  type: number
+                  example: Optional[float]
+                amenities:
+                  type: string
+                  example: Optional[Comma-seperated string (no spaces)]
+                images:
+                  type: object
+                  example: Optional[ImageFile] - (0-N)
+        required: True
+      responses:
+        '200':
+          description: Successful operation (only sends updated fields)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      max_number_of_guests: 9
+                      price: 25.42
+                      amenities: "Pool,Kayaking,Lake"
+                      images: ["/media/property/TestProp2-20191028_232439.jpg", "/media/property/TestProp2-Annotation_2019-10-17_183643.png"]
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  amenities:
+                    type: string
+                    example: "Amenities is not formatted as a comma-seperated list"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User that is not a Host has no properties"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Cannot edit another host's property"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property with id: 12 does not exist"
+
   /property/{id}/delete/:
     delete:
       tags:
         - property
+      summary: Delete property and its images.
+      description: Delete property and its images.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the property to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation (only sends updated fields)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  details:
+                    type: string
+                    example: "Property successfully deleted"
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  amenities:
+                    type: string
+                    example: "Amenities is not formatted as a comma-seperated list"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User that is not a Host has no properties"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Cannot delete another host's property"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property with id: 12 does not exist"
 
   /property/create/:
     post:
       tags:
         - property
-  
-  /property/all/:
+      summary: Create property with no images
+      description: Create property with no images
+      requestBody:
+        description: Create property with no images
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: string
+                location:
+                  type: string
+                  example: string
+                description:
+                  type: string
+                  example: string
+                max_number_of_guests:
+                  type: integer
+                  example: integer
+                price:
+                  type: number
+                  example: float
+                amenities:
+                  type: string
+                  example: Comma-seperated string (no spaces)
+      responses:
+        '200':
+          description: Successful operation (only sends updated fields)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  details:
+                    type: string
+                    example: "Property successfully deleted"
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  amenities:
+                    type: string
+                    example: "Amenities is not formatted as a comma-seperated list"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User that is not a Host has no properties"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Cannot delete another host's property"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property with id: 12 does not exist"
+
+  /property/search/:
     get:
       tags:
         - property
@@ -784,7 +1049,7 @@ paths:
                           type: integer
                           example: 1
         '401':
-          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
+          description: Unauthorized operation
           content:
             application/json:
               schema:
@@ -884,11 +1149,6 @@ paths:
                   code:
                     type: string
                     example: "token_not_valid"
-  
-  /property/search/:
-    get:
-      tags:
-        - property
 
 components:
   schemas:
