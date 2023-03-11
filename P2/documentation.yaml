@@ -3,6 +3,9 @@ info:
   title: Restify
   description: |-
     Documentation with a full list of API endpoints, a short description, their methods, and the payloads. Note that the Simple JWT Token is required for each endpoint unless otherwise stated.
+    
+    Requirements: Minimum of Python 3.10 and pip installation.
+    startup.sh and run.sh both require chmod +x, but startup.sh must be run as "source ./startup.sh".
   version: 1.0.0
 tags:
   - name: api
@@ -989,7 +992,7 @@ paths:
       tags:
         - property
       summary: Get all properties (0 to N objects returned)
-      description: Get all properties (0 to N objects returned)
+      description: Sorting and filtering is possible. <br><br> Filter by "amenities", "location", "max_number_of_guests", "max_price", "min_price", "title", "start_availability", "end_availability" as the keys. <br><br> Sort by "id", "title", "location", "max_number_of_guests", "price" as the value and "sort" as the key (can only sort by 1). <br><br> Order with either "asc" or "desc" as the value and "order_by" as the key.
       parameters:
         - name: page
           in: query

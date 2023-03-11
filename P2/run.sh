@@ -1,1 +1,3 @@
-./restify/manage.py runserver
+#!/bin/bash
+
+python3 restify/manage.py runserver
