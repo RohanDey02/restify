@@ -989,7 +989,7 @@ paths:
       tags:
         - property
       summary: Get all properties (0 to N objects returned)
-      description: Get all properties (0 to N objects returned)
+      description: Sorting and filtering is possible. <br><br> Filter by "amenities", "location", "max_number_of_guests", "max_price", "min_price", "title", "start_availability", "end_availability" as the keys. <br><br> Sort by "id", "title", "location", "max_number_of_guests", "price" as the value and "sort" as the key (can only sort by 1). <br><br> Order with either "asc" or "desc" as the value and "order_by" as the key.
       parameters:
         - name: page
           in: query
