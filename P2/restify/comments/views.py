@@ -2,11 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from P2.restify.accounts.models import RestifyUser
+from accounts.models import RestifyUser
 
-from P2.restify.comments.models import Comment, Feedback
-from P2.restify.properties.models import Property
-from P2.restify.reservations.models import Reservation
+from comments.models import Comment, Feedback
+from properties.models import Property
+from reservations.models import Reservation
 
 class CreateComment(APIView):
     def post(self, request):
