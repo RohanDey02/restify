@@ -3,6 +3,9 @@ info:
   title: Restify
   description: |-
     Documentation with a full list of API endpoints, a short description, their methods, and the payloads. Note that the Simple JWT Token is required for each endpoint unless otherwise stated.
+    
+    Requirements: Minimum of Python 3.10 and pip installation.
+    startup.sh and run.sh both require chmod +x, but startup.sh must be run as "source ./startup.sh".
   version: 1.0.0
 tags:
   - name: api
