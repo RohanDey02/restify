@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,6 +14,7 @@ class CreateComment(APIView):
         if request.user.is_authenticated:
             data = request.data
             if data["property_id"]:
+                property = None
                 try:
                     property = Property.objects.get(id=data["property_id"])
                 except:
@@ -22,12 +24,14 @@ class CreateComment(APIView):
                     if reservations.filter(user=request.user).count() == 0:
                         return Response({"message": "error", "details": "User is not a guest of this property"}, status=status.HTTP_403_FORBIDDEN)
                     else:
+                        feedback = None
                         if reservations.filter(user=request.user, feedback__isnull=False).count() == 0:
                             feedback = Feedback(
                                 property_rating=data["property_rating"]
                             )
                             feedback.save()
                         elif data["reservation_id"]:
+                            reservation = None
                             try:
                                 reservation = Reservation.objects.get(id=data["reservation_id"])
                             except:
@@ -43,7 +47,7 @@ class CreateComment(APIView):
                             message=data["message"],
                             comment_type="property",
                             sender_type="guest",
-                            last_modified=data["last_modified"],
+                            last_modified=datetime.now(),
                             feedback=feedback
                         )
                         comment.save()
@@ -57,6 +61,7 @@ class CreateComment(APIView):
                         }}, status=status.HTTP_201_CREATED)
                 else:
                     if data["reservation_id"]:
+                        reservation = None
                         try:
                             reservation = Reservation.objects.get(id=data["reservation_id"])
                         except:
@@ -66,7 +71,7 @@ class CreateComment(APIView):
                                 message=data["message"],
                                 comment_type="property",
                                 sender_type="host",
-                                last_modified=data["last_modified"],
+                                last_modified=datetime.now(),
                                 feedback=reservation.feedback
                             )
                             comment.save()
@@ -83,6 +88,7 @@ class CreateComment(APIView):
                     else:
                         return Response({"message": "error", "details": "Reservation ID is required"}, status=status.HTTP_400_BAD_REQUEST)
             elif data["guest_id"]:
+                guest = None
                 try:
                     guest = RestifyUser.objects.get(id=data["guest_id"])
                 except:
@@ -91,12 +97,14 @@ class CreateComment(APIView):
                     properties = request.user.property_set.all()
                     for property in properties:
                         if reservations.filter(user=guest, property=property).count() != 0:
+                            feedback = None
                             if reservations.filter(user=guest, property=property, feedback__isnull=False).count() == 0:
                                 feedback = Feedback(
                                     user_rating=data["user_rating"]
                                 )
                                 feedback.save()
                             elif data["reservation_id"]:
+                                reservation = None
                                 try:
                                     reservation = Reservation.objects.get(id=data["reservation_id"])
                                 except:
@@ -109,24 +117,25 @@ class CreateComment(APIView):
                             else:
                                 return Response({"message": "error", "details": "Reservation ID is required"}, status=status.HTTP_400_BAD_REQUEST)
                             comment = Comment(
-                            message=data["message"],
-                            comment_type="guest",
-                            sender_type="host",
-                            last_modified=data["last_modified"],
-                            feedback=data["feedback"]
-                        )
-                        comment.save()
-                        return Response({"message": "success", "data": {
-                            "id": comment.pk,
-                            "message": comment.message,
-                            "comment_type": comment.comment_type,
-                            "sender_type": comment.sender_type,
-                            "last_modified": comment.last_modified,
-                            "feedback": comment.feedback
-                        }}, status=status.HTTP_201_CREATED)
+                                message=data["message"],
+                                comment_type="guest",
+                                sender_type="host",
+                                last_modified=datetime.now(),
+                                feedback=feedback
+                            )
+                            comment.save()
+                            return Response({"message": "success", "data": {
+                                "id": comment.pk,
+                                "message": comment.message,
+                                "comment_type": comment.comment_type,
+                                "sender_type": comment.sender_type,
+                                "last_modified": comment.last_modified,
+                                "feedback": comment.feedback
+                            }}, status=status.HTTP_201_CREATED)
                     return Response({"message": "error", "details": "User did not host this guest"}, status=status.HTTP_403_FORBIDDEN)
                 else:
                     if data["reservation_id"]:
+                        reservation = None
                         try:
                             reservation = Reservation.objects.get(id=data["reservation_id"])
                         except:
@@ -136,7 +145,7 @@ class CreateComment(APIView):
                                 message=data["message"],
                                 comment_type="guest",
                                 sender_type="guest",
-                                last_modified=data["last_modified"],
+                                last_modified=datetime.now(),
                                 feedback=reservation.feedback
                             )
                             comment.save()
@@ -194,6 +203,13 @@ def get_all_guest_feedback_comments(request, id):
         if guest.account_type != "User":
             return Response({"message": "error", "details": "The requested user is not a guest"}, status=status.HTTP_404_NOT_FOUND)
         reservations = Reservation.objects.filter(user=guest)
+        is_users_guest = False
+        for reservation in reservations:
+            if reservation.property.host == request.user:
+                is_users_guest = True
+                break
+        if not is_users_guest:
+            return Response({"message": "error", "details": "User is not a guest of the requesting user"}, status=status.HTTP_403_FORBIDDEN)
         comments = []
         for reservation in reservations:
             feedback = reservation.feedback
