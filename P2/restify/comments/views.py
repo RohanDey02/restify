@@ -169,6 +169,7 @@ class CreateComment(APIView):
 @api_view(['GET'])
 def get_all_property_feedback_comments(request, id):
     if request.user.is_authenticated:
+        property = None
         try:
             property = Property.objects.get(id=id)
         except:
@@ -196,6 +197,7 @@ def get_all_property_feedback_comments(request, id):
 @api_view(['GET'])
 def get_all_guest_feedback_comments(request, id):
     if request.user.is_authenticated:
+        guest = None
         try:
             guest = RestifyUser.objects.get(id=id)
         except:
@@ -232,6 +234,7 @@ def get_all_guest_feedback_comments(request, id):
 @api_view(['GET'])
 def get_property_conversation_comments(request, id):
     if request.user.is_authenticated:
+        reservation = None
         try:
             reservation = Reservation.objects.get(id=id)
         except:
@@ -257,6 +260,7 @@ def get_property_conversation_comments(request, id):
 @api_view(['GET'])
 def get_guest_conversation_comments(request, id):
     if request.user.is_authenticated:
+        reservation = None
         try:
             reservation = Reservation.objects.get(id=id)
         except:
@@ -282,6 +286,7 @@ def get_guest_conversation_comments(request, id):
 @api_view(['GET'])
 def get_ratings(request, id):
     if request.user.is_authenticated:
+        reservation = None
         try:
             reservation = Reservation.objects.get(id=id)
         except:
