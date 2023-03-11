@@ -12,4 +12,4 @@ class Reservation(models.Model):
 
     # Foreign Keys
     user = models.ForeignKey(RestifyUser, on_delete=models.CASCADE, limit_choices_to={'account_type': 'User'})
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="reservations")
