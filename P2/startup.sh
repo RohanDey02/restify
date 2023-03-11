@@ -14,6 +14,7 @@ if [ `echo $?` -eq 127 ] ; then
     sudo apt install python3-pip
 fi
 
+sudo apt install curl
 curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.11
 
 # Go back to current directory
