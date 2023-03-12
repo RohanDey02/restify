@@ -1153,6 +1153,216 @@ paths:
                     type: string
                     example: "token_not_valid"
   # Reservation endpoints
+  /reservations/{id}/:
+    get:
+      tags:
+        - reservations
+      summary: Get the reservation by id
+      description: Get the reservation by id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the property to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      id: 5
+                      start_date: '2022-05-25'
+                      end_date: 2022-05-27
+                      status: Pending
+                      feedback: null
+                      user: 1
+                      property: 1
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Unauthorized access"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Reservation not found"
+
+  /reservations/all/:
+    get:
+      tags:
+        - reservations
+      summary: Get all reservations (0 to N objects returned)
+      description: Get all reservations (0 to N objects returned)
+      parameters:
+        - name: page
+          in: query
+          description: The page for the pagination query. Required if page_size is specified.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The page size for the pagination query. Not required.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  next:
+                    type: object
+                    example: null
+                  previous:
+                    type: object
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        start_date:
+                          type: string
+                          example: 2022-05-25
+                        end_date:
+                          type: string
+                          example: 2022-05-27
+                        status:
+                          type: string
+                          example: Pending
+        '400':
+          description: Bad request operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: ""
+        '401':
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
+  /reservations/mine/:
+    get:
+      tags:
+        - reservations
+      summary: Get all reservations (0 to N objects returned)
+      description: Get all reservations tied to user whos logged in (0 to N objects returned)
+      parameters:
+        - name: page
+          in: query
+          description: The page for the pagination query. Required if page_size is specified.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The page size for the pagination query. Not required.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  next:
+                    type: object
+                    example: null
+                  previous:
+                    type: object
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        start_date:
+                          type: string
+                          example: 2022-05-25
+                        end_date:
+                          type: string
+                          example: 2022-05-27
+                        status:
+                          type: string
+                          example: Pending
+        '400':
+          description: Bad request operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: ""
+        '401':
+          description: Unauthorized operation (Can also have "Authentication credentials were not provided.")
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: "Token is invalid or expired"
+                  code:
+                    type: string
+                    example: "token_not_valid"
   /reservations/{id}/update:
     put:
         tags:
@@ -1160,18 +1370,12 @@ paths:
         summary: Update reservation
         description: Update reservation specified by id
         parameters:
-          - name: page
-            in: query
-            description: The page for the pagination query. Required if page_size is specified.
-            required: false
+          - name: id
+            in: path
+            description: The id of the reservation being updated.
+            required: true
             schema:
-              type: integer
-          - name: page_size
-            in: query
-            description: The page size for the pagination query. Not required.
-            required: false
-            schema:
-              type: integer
+              type: string
         responses:
           "200":
             description: Successful operation
@@ -1181,13 +1385,128 @@ paths:
                   properties:
                       start_date:
                         type: string
-                        example: "2022-05-25"
+                        example: Optional[str]
                       end_date:
                         type: string
-                        example: "2022-05-25"
+                        example: Optional[str]
                       status:
                         type: string
                         example: Optional[str]
+          "400":
+            description: Bad request operation (error message varies)
+            content:
+              application/json:
+                schema:
+                  properties:
+                    message:
+                      type: string
+                      example: "error"
+                    dates:
+                      type: string
+                      example: "Start date cannot be after end date"
+          '401':
+            description: Unauthorized operation
+            content:
+              application/json:
+                schema:
+                  properties:
+                    details:
+                      type: string
+                      example: "Authentication credentials were not provided."
+          '404':
+            description: Not found operation
+            content:
+              application/json:
+                schema:
+                  properties:
+                    message:
+                      type: string
+                      example: "error"
+                    details:
+                      type: string
+                      example: "Reservation does not exist!"
+  /reservations/{property_id}/create/:
+    post:
+      tags:
+        - reservations
+      summary: Create reservation
+      description: Create reservation
+      parameters:
+          - name: property_id
+            in: path
+            description: The id of the property which is being reserved
+            required: true
+            schema:
+              type: string
+      requestBody:
+        description: Create reservation
+        content:
+          application/json:
+            schema:
+              properties:
+                start_date:
+                  type: string
+                  example: string
+                end_date:
+                  type: string
+                  example: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    properties:
+                      start_date:
+                        type: string
+                        example: 2022-05-25
+                      end_date:
+                        type: string
+                        example: 2022-05-27
+                      status:
+                        type: string
+                        example: Pending
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  amenities:
+                    type: string
+                    example: "Dates overlap with another reservation"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: ""
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property with id: 12 does not exist"
 components:
   schemas:
     Comment:
