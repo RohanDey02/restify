@@ -17,7 +17,7 @@ class CreateAccount(APIView):
     def post(self, request):
         serializer = CreateUserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(request.POST.get('password2', None))
+            serializer.save(request.data.get('password2', None))
             return Response({"message": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response({"message": "error", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
