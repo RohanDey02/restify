@@ -182,7 +182,7 @@ def get_all_property_feedback_comments(request, id):
             property = Property.objects.get(id=id)
         except:
             return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
-        reservations = property.reservation_set.all()
+        reservations = property.reservations.all()
         comments = []
         for reservation in reservations:
             feedback = reservation.feedback
@@ -240,6 +240,24 @@ def get_all_guest_feedback_comments(request, id):
         return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
+def get_comment(request, id):
+    if request.user.is_authenticated:
+        comment = None
+        try:
+            comment = Comment.objects.get(id=id)
+        except:
+            return Response({"message": "error", "details": "Comment not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "success", "data": {
+            "id": comment.pk,
+            "message": comment.message,
+            "comment_type": comment.comment_type,
+            "sender_type": comment.sender_type,
+            "last_modified": comment.last_modified,
+        }}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
 def get_property_conversation_comments(request, id):
     if request.user.is_authenticated:
         reservation = None
@@ -258,7 +276,6 @@ def get_property_conversation_comments(request, id):
                 "comment_type": comment.comment_type,
                 "sender_type": comment.sender_type,
                 "last_modified": comment.last_modified,
-                "feedback": comment.feedback
             } for comment in comments]}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": "User is not a host or guest for the reservation"}, status=status.HTTP_403_FORBIDDEN)
@@ -284,7 +301,6 @@ def get_guest_conversation_comments(request, id):
                 "comment_type": comment.comment_type,
                 "sender_type": comment.sender_type,
                 "last_modified": comment.last_modified,
-                "feedback": comment.feedback
             } for comment in comments]}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": "User is not a host or guest for the reservation"}, status=status.HTTP_403_FORBIDDEN)
@@ -303,7 +319,7 @@ def get_ratings(request, id):
         if feedback:
             return Response({"message": "success", "data": {
                 "property_rating": feedback.property_rating,
-                "guest_rating": feedback.guest_rating
+                "user_rating": feedback.user_rating,
             }}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": "Feedback not found"}, status=status.HTTP_404_NOT_FOUND)
