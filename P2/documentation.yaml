@@ -654,6 +654,490 @@ paths:
                     type: string
                     example: "Invalid user or user not found"
 
+  # Comments Endpoints
+  /comments/{id}/:
+    get:
+      tags:
+        - comments
+      summary: Get the comment by id
+      description: Get the comment by id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the comment to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      message: "I had a great time at John's place"
+                      comment_type: "property"
+                      sender_type: "guest"
+                      last_modified: "2023-03-05 18:21:25"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Comment not found"
+                    
+  /comments/create/:
+    post:
+      tags:
+        - comments
+      summary: Create a comment
+      description: Create a comment
+      requestBody:
+        description: Create a comment
+        content:
+          application/json:
+            schema:
+              properties:
+                message:
+                  type: string
+                  example: string
+                property_id:
+                  type: string
+                  example: string | Must supply this or guest_id
+                guest_id:
+                  type: string
+                  example: string | Must supply this or property_id
+                property_rating:
+                  type: number
+                  example: float | Maximum 5.0, optional
+                user_rating:
+                  type: number
+                  example: float | Maximum 5.0, optional
+                reservation_id:
+                  type: string
+                  example: string | Optional
+      responses:
+        '201':
+          description: Successfully created operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      message:
+                        type: string
+                        example: I had a great time at John's place
+                      comment_type:
+                        type: string
+                        example: property
+                      sender_type:
+                        type: string
+                        example: guest
+                      last_modified:
+                        type: string
+                        example: 2023-03-05 18:21:25
+                      rating:
+                        type: number
+                        example: 4.5
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  amenities:
+                    type: string
+                    example: "Property or guest not specified"
+        '401':
+          description: Unauthorized operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '403':
+          description: Forbidden operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User has not completed a reservation at this property"
+        '404':
+          description: Not found operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Guest not found"
+                    
+  /comments/{id}/allPropertyFeedbackComments/:
+    get:
+      tags:
+        - comments
+      summary: Get all guests' primary comments
+      description: Get all guests' primary comments of a property
+      parameters:
+        - name: id
+          in: path
+          description: The id of the property to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      example:
+                        id: 1
+                        message: "I had a great time at John's place"
+                        comment_type: "property"
+                        sender_type: "guest"
+                        last_modified: "2023-03-05 18:21:25"
+                        property_rating: 4.5
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Property not found"
+                    
+  /comments/{id}/allGuestFeedbackComments/:
+    get:
+      tags:
+        - comments
+      summary: Get all owners' primary comments
+      description: Get all property owners' primary comments of a guest
+      parameters:
+        - name: id
+          in: path
+          description: The id of the guest to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      example:
+                        id: 1
+                        message: "It was a pleasure to host John"
+                        comment_type: "guest"
+                        sender_type: "host"
+                        last_modified: "2023-03-05 18:21:25"
+                        user_rating: 4.5
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not a guest of the requesting user"
+        '404':
+          description: Not found operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User not found"
+                    
+  /comments/{id}/propertyConversationComments/:
+    get:
+      tags:
+        - comments
+      summary: Get property conversation
+      description: Get property conversation comments of a reservation
+      parameters:
+        - name: id
+          in: path
+          description: The id of the reservation to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      example:
+                        id: 1
+                        message: "I had a great time at John's place"
+                        comment_type: "property"
+                        sender_type: "guest"
+                        last_modified: "2023-03-05 18:21:25"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not a host or guest for the reservation"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Reservation not found"
+                    
+  /comments/{id}/guestConversationComments/:
+    get:
+      tags:
+        - comments
+      summary: Get guest conversation
+      description: Get guest conversation comments of a reservation
+      parameters:
+        - name: id
+          in: path
+          description: The id of the reservation to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      example:
+                        id: 1
+                        message: "It was a pleasure to host John"
+                        comment_type: "guest"
+                        sender_type: "host"
+                        last_modified: "2023-03-05 18:21:25"
+                        user_rating: 4.5
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not a host or guest for the reservation"
+        '404':
+          description: Not found operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User not found"
+                    
+  /comments/{id}/ratings/:
+    get:
+      tags:
+        - comments
+      summary: Get a reservations' ratings
+      description: Get the property and user ratings of a reservation
+      parameters:
+        - name: id
+          in: path
+          description: The id of the reservation to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      property_rating: 4.5
+                      user_rating: 4.7
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '404':
+          description: Not found operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Reservation not found"
+
   # Property Endpoints
   /property/{id}/:
     get:

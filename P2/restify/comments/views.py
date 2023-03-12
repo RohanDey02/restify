@@ -209,7 +209,7 @@ def get_all_guest_feedback_comments(request, id):
         try:
             guest = RestifyUser.objects.get(id=id)
         except:
-            return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "error", "details": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         if guest.account_type != "User":
             return Response({"message": "error", "details": "The requested user is not a guest"}, status=status.HTTP_404_NOT_FOUND)
         reservations = Reservation.objects.filter(user=guest)
