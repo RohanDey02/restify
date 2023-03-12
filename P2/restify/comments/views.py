@@ -21,16 +21,16 @@ class CreateComment(APIView):
                     return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
                 if request.user.account_type == "User":
                     reservations = property.reservations.all()
-                    if reservations.filter(user=request.user).count() == 0:
-                        return Response({"message": "error", "details": "User is not a guest of this property"}, status=status.HTTP_403_FORBIDDEN)
+                    if reservations.filter(user=request.user, status="Completed").count() == 0:
+                        return Response({"message": "error", "details": "User has not completed a reservation at this property"}, status=status.HTTP_403_FORBIDDEN)
                     else:
                         feedback = None
-                        if reservations.filter(user=request.user, feedback__isnull=False).count() == 0:
+                        if reservations.filter(user=request.user, feedback__isnull=False, status="Completed").count() == 0:
                             feedback = Feedback(
                                 property_rating=data["property_rating"]
                             )
                             feedback.save()
-                            reservation = reservations.filter(user=request.user, feedback__isnull=True).order_by('start_date').last()
+                            reservation = reservations.filter(user=request.user, feedback__isnull=True, status="Completed").order_by('start_date').last()
                             reservation.feedback = feedback
                             reservation.save()
                         elif "reservation_id" in data:
@@ -39,7 +39,7 @@ class CreateComment(APIView):
                                 reservation = Reservation.objects.get(id=data["reservation_id"])
                             except:
                                 return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
-                            if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="property").order_by('last_modified').last().sender_type == "host":
+                            if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="property").count != 0 and reservation.feedback.comment_set.filter(comment_type="property").order_by('last_modified').last().sender_type == "host":
                                 feedback = reservation.feedback
                                 if "property_rating" in data:
                                     feedback.property_rating = data["property_rating"]
@@ -71,7 +71,7 @@ class CreateComment(APIView):
                             reservation = Reservation.objects.get(id=data["reservation_id"])
                         except:
                             return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
-                        if reservation.feedback and reservation.comment_set.filter(comment_type="property").count != 0 and reservation.comment_set.filter(comment_type="property").order_by('last_modified').last().sender_type == "guest" and reservation.property.host == request.user:
+                        if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="property").count != 0 and reservation.feedback.comment_set.filter(comment_type="property").order_by('last_modified').last().sender_type == "guest" and reservation.property.host == request.user:
                             comment = Comment(
                                 message=data["message"],
                                 comment_type="property",
@@ -100,14 +100,14 @@ class CreateComment(APIView):
                 if request.user.account_type == "Host":
                     properties = request.user.property_set.all()
                     for property in properties:
-                        if reservations.filter(user=guest, property=property).count() != 0:
+                        if Reservation.objects.filter(user=guest, property=property, status="Completed").count() != 0:
                             feedback = None
-                            if reservations.filter(user=guest, property=property, feedback__isnull=False).count() == 0:
+                            if Reservation.objects.filter(user=guest, property=property, feedback__isnull=False, status="Completed").count() == 0:
                                 feedback = Feedback(
                                     user_rating=data["user_rating"]
                                 )
                                 feedback.save()
-                                reservation = reservations.filter(user=guest, property=property, feedback__isnull=True).order_by('start_date').last()
+                                reservation = Reservation.objects.filter(user=guest, property=property, feedback__isnull=True, status="Completed").order_by('start_date').last()
                                 reservation.feedback = feedback
                                 reservation.save()
                             elif "reservation_id" in data:
@@ -116,7 +116,7 @@ class CreateComment(APIView):
                                     reservation = Reservation.objects.get(id=data["reservation_id"])
                                 except:
                                     return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
-                                if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="guest").order_by('last_modified').last().sender_type == "guest":
+                                if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="guest").count() != 0 and reservation.feedback.comment_set.filter(comment_type="guest").order_by('last_modified').last().sender_type == "guest":
                                     feedback = reservation.feedback
                                     if "user_rating" in data:
                                         feedback.user_rating = data["user_rating"]
