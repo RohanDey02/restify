@@ -21,7 +21,7 @@ tags:
   - name: reservations
     description: Operations about Restify Reservations
 servers:
-  - url: http://127.0.0.1
+  - url: http://127.0.0.1:8000
 paths:
   # API Endpoints
   /api/token/:
@@ -835,7 +835,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful operation (only sends updated fields)
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -846,18 +846,6 @@ paths:
                   details:
                     type: string
                     example: "Property successfully deleted"
-        '400':
-          description: Bad request operation (error message varies)
-          content:
-            application/json:
-              schema:
-                properties:
-                  message:
-                    type: string
-                    example: "error"
-                  amenities:
-                    type: string
-                    example: "Amenities is not formatted as a comma-seperated list"
         '401':
           description: Unauthorized operation
           content:
@@ -926,8 +914,8 @@ paths:
                   type: string
                   example: Comma-seperated string (no spaces)
       responses:
-        '200':
-          description: Successful operation (only sends updated fields)
+        '201':
+          description: Successfully created operation
           content:
             application/json:
               schema:
@@ -935,18 +923,36 @@ paths:
                   message:
                     type: string
                     example: "success"
-                  details:
-                    type: string
-                    example: "Property successfully deleted"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 12
+                      title:
+                        type: string
+                        example: The Lodge
+                      location:
+                        type: string
+                        example: Toronto
+                      description:
+                        type: string
+                        example: Some property
+                      max_number_of_guests:
+                        type: number
+                        example: 5
+                      price:
+                        type: number
+                        example: 121.00
+                      amenities:
+                        type: string
+                        example: "Kayaking,Lake"
         '400':
           description: Bad request operation (error message varies)
           content:
             application/json:
               schema:
                 properties:
-                  message:
-                    type: string
-                    example: "error"
                   amenities:
                     type: string
                     example: "Amenities is not formatted as a comma-seperated list"
@@ -961,31 +967,7 @@ paths:
                     example: "error"
                   details:
                     type: string
-                    example: "User that is not a Host has no properties"
-        '403':
-          description: Forbidden operation
-          content:
-            application/json:
-              schema:
-                properties:
-                  message:
-                    type: string
-                    example: "error"
-                  details:
-                    type: string
-                    example: "Cannot delete another host's property"
-        '404':
-          description: Not found operation
-          content:
-            application/json:
-              schema:
-                properties:
-                  message:
-                    type: string
-                    example: "error"
-                  details:
-                    type: string
-                    example: "Property with id: 12 does not exist"
+                    example: "User that is not Host cannot create a property"
 
   /property/search/:
     get:
