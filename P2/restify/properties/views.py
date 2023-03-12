@@ -187,11 +187,11 @@ class PropertySearch(ListAPIView):
         if self.request.GET.get("title", None) != None:
             title = self.request.GET["title"]
             property_objs = property_objs.filter(title__contains=title)
-
+        
         if self.request.GET.get("start_availability", None) != None and self.request.GET.get("end_availability", None) != None:
             try:
-                start_availability = datetime.strptime(self.request.GET["start_availability"], "%m/%d/%Y").date()
-                end_availability = datetime.strptime(self.request.GET["end_availability"], "%m/%d/%Y").date()
+                start_availability = datetime.strptime(self.request.GET["start_availability"], "%Y-%m-%d").date()
+                end_availability = datetime.strptime(self.request.GET["end_availability"], "%Y-%m-%d").date()
 
                 # If in the past or if end date is before start date
                 if start_availability < datetime.now().date() or end_availability <= start_availability:
@@ -204,7 +204,7 @@ class PropertySearch(ListAPIView):
                 properties_to_be_dropped = []
 
                 for elem in property_objs:
-                    all_reservations = elem.reservation_set.all()
+                    all_reservations = elem.reservations.all()
                     for reservation in all_reservations:
                         date_range = list(map(lambda dt: dt.date(), pd.date_range(start=reservation.start_date,end=reservation.end_date).to_pydatetime().tolist()))
                         if not set(date_range_query).isdisjoint(date_range):
