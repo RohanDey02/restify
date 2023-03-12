@@ -69,33 +69,29 @@ def get_reservation_by_id(request, id):
     else:
         return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(["GET"])
-def get_user_reservations(request: HttpRequest):
-    if not request.user.is_authenticated:
-        return Response({"message": "error", "details": "User that is not Host cannot create a property"}, status=status.HTTP_401_UNAUTHORIZED)
-    reservations = None
-    state = request.query_params.get("state")
-    if state:
-        state = state.strip().lower()
-    if state not in ["pending", "denied", "approved", "cancelled", "completed", "terminated"]:
-        state = None
-    if request.user.account_type == "Host":
+class GetUserReservations(ListAPIView):
+    serializer_class = SearchReservationSerializer
+    pagination_class = ReservationSearchPagination
+
+    def get_queryset(self):
+        reservations = None
+        state = self.request.query_params.get("state")
         if state:
-            reservations = Reservation.objects.filter(property__host=request.user, status=state)
+            state = state.strip().lower()
+        if state not in ["pending", "denied", "approved", "cancelled", "completed", "terminated"]:
+            state = None
+        if self.request.user.account_type == "Host":
+            if state:
+                reservations = Reservation.objects.filter(property__host=self.request.user, status=state)
+            else:
+                reservations = Reservation.objects.filter(property__host=self.request.user)
         else:
-            reservations = Reservation.objects.filter(property__host=request.user)
-    else:
-        if state:
-            reservations = Reservation.objects.filter(user=request.user, status=state)
-        else:
-            reservations = Reservation.objects.filter(user=request.user)
-    return Response({"message": "success",
-                        "data": [{
-                        "id": res.id,
-                        "start_date": res.start_date,
-                        "end_date": res.end_date,
-                        "status": res.status,
-                        } for res in reservations]})
+            if state:
+                reservations = Reservation.objects.filter(user=self.request.user, status=state)
+            else:
+                reservations = Reservation.objects.filter(user=self.request.user)
+        
+        return reservations
 
 # Creating a reservation
 # example URL
@@ -148,4 +144,3 @@ class UpdateReservationView(UpdateAPIView):
             return Response({"message": "success", "data": response}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
