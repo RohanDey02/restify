@@ -12,6 +12,8 @@ from .models import RestifyUser
 from .serializers import CreateUserSerializer, UpdateUserSerializer
 
 class CreateAccount(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = CreateUserSerializer(data=request.data)
         if serializer.is_valid():
