@@ -17,8 +17,12 @@ def get_reservations(request: HttpRequest):
         return Response({"message": "error", "details": "User that is not Host cannot create a property"}, status=status.HTTP_401_UNAUTHORIZED)
 
     # get query params and validate
-    user_type = request.query_params.get("user").strip().lower()
-    state = request.query_params.get("state").strip().lower()
+    user_type = request.query_params.get("user")
+    if user_type:
+        user_type = user_type.strip().lower()
+    state = request.query_params.get("state")
+    if state:
+        state = state.strip().lower()
     if user_type not in ["host", "guest"]:
         user_type = None
     # find correct list of states allowed
@@ -48,7 +52,9 @@ def get_user_reservations(request: HttpRequest):
     if not request.user.is_authenticated:
         return Response({"message": "error", "details": "User that is not Host cannot create a property"}, status=status.HTTP_401_UNAUTHORIZED)
     reservations = None
-    state = request.query_params.get("state").strip().lower()
+    state = request.query_params.get("state")
+    if state:
+        state = state.strip().lower()
     if state not in ["pending", "denied", "approved", "cancelled", "completed", "terminated"]:
         state = None
     if request.user.account_type == "Host":
@@ -101,11 +107,13 @@ class UpdateReservationView(UpdateAPIView):
         for item in request.data.keys():
                 if item not in ['start_date', 'end_date', 'status']:
                     return Response({"message": "error", "details": "Invalid key in body"}, status=status.HTTP_400_BAD_REQUEST)
-        res_id = self.kwargs.get("reservation_id")
+        res_id = self.kwargs.get("id")
         try:
             res = Reservation.objects.get(id=res_id)
         except Reservation.DoesNotExist:
             return Response({"message": "error", "details": "Reservation does not exist!"}, status=status.HTTP_404_NOT_FOUND)
+        if res.user.id != request.user.id and res.property.host.id != request.user.id:
+            return Response({"message": "error", "details": "User is not authorized to update this reservation!"}, status=status.HTTP_401_UNAUTHORIZED)
         serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
             updated_res: Reservation = serializer.save(res)
