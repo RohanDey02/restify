@@ -100,3 +100,8 @@ class UpdateReservationSerializer(ModelSerializer):
             updated_fields.append("status")
         res.save(update_fields=updated_fields)
         return res
+
+class SearchReservationSerializer(ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['id', 'start_date', 'end_date', 'status']
