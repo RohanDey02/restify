@@ -29,6 +29,8 @@ class CreateReservationSerializer(ModelSerializer):
 
 
     def save(self, user, property: Property):
+        if self.validated_data["end_date"] < self.validated_data["start_date"]:
+            raise ValidationError({"dates": "End date must be after start date"})
         date_pairs = generate_date_pairs(property)
         if check_date_overlap(self.validated_data['start_date'], self.validated_data['end_date'], date_pairs):
             raise ValidationError({"dates": "Dates overlap with another reservation"})
@@ -88,9 +90,9 @@ class UpdateReservationSerializer(ModelSerializer):
         elif start_date:
             converted_end = res.end_date
             if start_date > converted_end:
-                raise ValidationError({"dates": "Start date cannot be after end date"})
+                raise ValidationError({"message": "error", "dates": "Start date cannot be after end date"})
             if check_date_overlap(start_date, converted_end, date_pairs):
-                raise ValidationError({"dates": "Dates overlap with another reservation"})
+                raise ValidationError({"message": "error", "dates": "Dates overlap with another reservation"})
             res.start_date = start_date
             updated_fields.append("start_date")
 
