@@ -13,6 +13,8 @@ class CreateComment(APIView):
     def post(self, request):
         if request.user.is_authenticated:
             data = request.data
+            if data.get('message') is None:
+                return Response({'message': 'Missing message field'}, status=status.HTTP_400_BAD_REQUEST)
             if "property_id" in data:
                 property = None
                 try:
@@ -27,7 +29,7 @@ class CreateComment(APIView):
                         feedback = None
                         if reservations.filter(user=request.user, feedback__isnull=False, status="Completed").count() == 0:
                             feedback = Feedback(
-                                property_rating=data["property_rating"]
+                                property_rating=data.get("property_rating", None),
                             )
                             feedback.save()
                             reservation = reservations.filter(user=request.user, feedback__isnull=True, status="Completed").order_by('start_date').last()
@@ -42,7 +44,7 @@ class CreateComment(APIView):
                             if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="property").count != 0 and reservation.feedback.comment_set.filter(comment_type="property").order_by('last_modified').last().sender_type == "host":
                                 feedback = reservation.feedback
                                 if "property_rating" in data:
-                                    feedback.property_rating = data["property_rating"]
+                                    feedback.property_rating = data.get("property_rating", None)
                                     feedback.save()
                             else:
                                 return Response({"message": "error", "details": "Host hasn't responded yet"}, status=status.HTTP_400_BAD_REQUEST)
@@ -62,7 +64,7 @@ class CreateComment(APIView):
                             "comment_type": comment.comment_type,
                             "sender_type": comment.sender_type,
                             "last_modified": comment.last_modified,
-                            "rating": data["property_rating"]
+                            "rating": data.get("property_rating", None)
                         }}, status=status.HTTP_201_CREATED)
                 else:
                     if "reservation_id" in data:
@@ -104,7 +106,7 @@ class CreateComment(APIView):
                             feedback = None
                             if Reservation.objects.filter(user=guest, property=property, feedback__isnull=False, status="Completed").count() == 0:
                                 feedback = Feedback(
-                                    user_rating=data["user_rating"]
+                                    user_rating=data.get("user_rating", None)
                                 )
                                 feedback.save()
                                 reservation = Reservation.objects.filter(user=guest, property=property, feedback__isnull=True, status="Completed").order_by('start_date').last()
@@ -119,7 +121,7 @@ class CreateComment(APIView):
                                 if reservation.feedback and reservation.feedback.comment_set.filter(comment_type="guest").count() != 0 and reservation.feedback.comment_set.filter(comment_type="guest").order_by('last_modified').last().sender_type == "guest":
                                     feedback = reservation.feedback
                                     if "user_rating" in data:
-                                        feedback.user_rating = data["user_rating"]
+                                        feedback.user_rating = data.get("user_rating", None)
                                         feedback.save()
                                 else:
                                     return Response({"message": "error", "details": "Guest hasn't responded yet"}, status=status.HTTP_400_BAD_REQUEST)
@@ -139,7 +141,7 @@ class CreateComment(APIView):
                                 "comment_type": comment.comment_type,
                                 "sender_type": comment.sender_type,
                                 "last_modified": comment.last_modified,
-                                "rating": data["user_rating"]
+                                "rating": data.get("user_rating", None)
                             }}, status=status.HTTP_201_CREATED)
                     return Response({"message": "error", "details": "User did not host this guest"}, status=status.HTTP_403_FORBIDDEN)
                 else:

@@ -778,7 +778,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  amenities:
+                  message:
                     type: string
                     example: "Property or guest not specified"
         '401':
@@ -1137,6 +1137,336 @@ paths:
                   details:
                     type: string
                     example: "Reservation not found"
+                    
+  # Notifications Endpoints
+  /notifications/{id}/:
+    get:
+      tags:
+        - notifications
+      summary: Get the notification by id
+      description: Get the notification by id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the notification to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      title: "New Comment"
+                      description: "Someone commented on your property!"
+                      url: "someurl.com"
+                      status: "Unread"
+                      user_id: 1
+                      host_id: 2
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "User is not authenticated"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "error"
+                  details:
+                    type: string
+                    example: "Notification not found"
+                    
+  /notifications/create/:
+    post:
+      tags:
+        - notifications
+      summary: Create a notification
+      description: Create a notification
+      requestBody:
+        description: Create a notification
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: string
+                description:
+                  type: string
+                  example: string
+                url:
+                  type: string
+                  example: string | Optional
+                status:
+                  type: string
+                  example: string
+                user_id:
+                  type: integer
+                  example: integer
+                host_id:
+                  type: integer
+                  example: integer
+      responses:
+        '201':
+          description: Successfully created operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      title:
+                        type: string
+                        example: New Comment
+                      description:
+                        type: string
+                        example: Someone commented on your property!
+                      url:
+                        type: string
+                        example: someurl.com
+                      status:
+                        type: string
+                        example: Unread
+                      user_id:
+                        type: integer
+                        example: 1
+                      host_id:
+                        type: integer
+                        example: 2
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Missing fields"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "User is not authenticated"
+        '404':
+          description: Not found operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Notification not found"
+                    
+  /notification/{id}/update/:
+    patch:
+      tags:
+        - notifications
+      summary: Update the notification
+      description: Update the notification
+      parameters:
+        - name: id
+          in: path
+          description: The id of the notification to be queried for.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update the notification
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: string
+                description:
+                  type: string
+                  example: string
+                url:
+                  type: string
+                  example: string | Optional
+                status:
+                  type: string
+                  example: string
+                user_id:
+                  type: integer
+                  example: integer
+                host_id:
+                  type: integer
+                  example: integer
+        required: True
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      title:
+                        type: string
+                        example: New Comment
+                      description:
+                        type: string
+                        example: Someone commented on your property!
+                      url:
+                        type: string
+                        example: someurl.com
+                      status:
+                        type: string
+                        example: Read
+                      user_id:
+                        type: integer
+                        example: 1
+                      host_id:
+                        type: integer
+                        example: 2
+        '400':
+          description: Bad request operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Missing fields"
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "User not authenticated"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Notification not found"
+                    
+  /notifications/all/:
+    get:
+      tags:
+        - notifications
+      summary: Get user's notifications
+      description: Get user's notifications
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      example:
+                        id: 1
+                        title: "New Comment"
+                        description: "Someone commented on your property!"
+                        url: "someurl.com"
+                        status: "Unread"
+                        user_id: 1
+                        host_id: 2
+        '401':
+          description: Unauthorized operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "User not authenticated"
+                    
+  /notifications/{id}/delete/:
+    delete:
+      tags:
+        - notifications
+      summary: Delete the notification
+      description: Delete the notification
+      parameters:
+        - name: id
+          in: path
+          description: The id of the notification to be queried for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Notification successfully deleted"
+        '401':
+          description: Unauthorized operation (error message varies)
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "User not authenticated"
+        '404':
+          description: Not found operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Notification not found"
 
   # Property Endpoints
   /property/{id}/:

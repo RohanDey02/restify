@@ -7,4 +7,5 @@ urlpatterns = [
     path('all/', views.GetNotifications.as_view(), name="all"),
     path('<int:id>/', views.get_notification, name="get_notification"),
     path('<int:id>/update/', views.UpdateNotification.as_view(), name="update"),
+    path('<int:id>/delete/', views.DeleteNotification.as_view(), name="delete"),
 ]
