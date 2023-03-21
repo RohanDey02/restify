@@ -48,7 +48,8 @@ def get_property(request, id):
                 'description': property.description,
                 'max_number_of_guests': property.max_number_of_guests,
                 'price': property.price,
-                'amenities': property.amenities
+                'amenities': property.amenities,
+                'images': [property_image.image.url for property_image in property.propertyimages_set.all()]
             }
         })
     else:
@@ -166,7 +167,6 @@ class PropertySearch(ListAPIView):
                         property_list.append(elem.id)
 
                 property_objs = property_objs.filter(id__in=property_list)
-                print(property_objs)
 
         if self.request.GET.get("location", None) != None:
             location = self.request.GET["location"]
