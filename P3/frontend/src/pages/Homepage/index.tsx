@@ -73,6 +73,8 @@ class Homepage extends React.Component<any> {
     }
 
     render() {
+        console.log(this.state)
+
         if (this.state.navigate) {
             this.setState({ navigate: false });
             return <Navigate to="/test" state={this.state} />
@@ -165,7 +167,7 @@ function HomepageWrapper(props: { pageSize: number; }) {
     const locationState = useLocation().state;
   
     return (
-      <Homepage pageSize={props.pageSize} locationState={locationState} />
+      <Homepage pageSize={props.pageSize} locationState={{data: locationState.data, tokens: locationState.tokens}} />
     );
   }
 
