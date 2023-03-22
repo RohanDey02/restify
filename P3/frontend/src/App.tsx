@@ -1,13 +1,16 @@
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Homepage from './pages/Homepage';
+import HomepageWrapper from './pages/Homepage';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
 	return <>
 		<Router>
 			<Routes>
-				<Route path="/" element={<Homepage pageSize={10} />} />
-				<Route path="/test" element={<Homepage pageSize={10} />} />
+				<Route path="/" element={<Login />} />
+				<Route path="/home" element={<HomepageWrapper pageSize={10} />} />
+				<Route path="/register" element={<Register />} />
 			</Routes>
 		</Router>
 	</>

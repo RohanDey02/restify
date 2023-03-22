@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navigate } from "react-router-dom";
-import { Property } from '../../assets/Property';
+import { Navigate, useLocation } from "react-router-dom";
+import { Property } from '../../assets/types/Property';
 import PropertyCard from '../../components/PropertyCard';
 import SearchModal from '../../components/SearchModal';
 import Navbar from '../../components/Navbar';
@@ -13,7 +13,8 @@ class Homepage extends React.Component<any> {
         pageSize: this.props.pageSize,
         show: false,
         totalPages: 1,
-        navigate: false
+        navigate: false,
+        locationState: this.props.locationState
     }
 
     async GetProperties(currentPage: number): Promise<any> {
@@ -21,7 +22,7 @@ class Homepage extends React.Component<any> {
             const response = await fetch(`/property/search/?page=${currentPage}&page_size=${this.state.pageSize}`, {
                 method: "GET",
                 headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc5NDMzODAwLCJpYXQiOjE2NzkzNDc0MDAsImp0aSI6IjBhMDlhYzBhMzBmZjQwMWY4MDJlYTdhYTg1MzdhMjVjIiwidXNlcl9pZCI6OX0.lqgGXcM9TjAj5g3IYMHQZ52IGAvi9tx-njqjUTVNbis',
+                    'Authorization': `Bearer ${this.state.locationState.tokens.access}`,
                     'Content-type': 'application/json'
                 }
             });
@@ -83,7 +84,7 @@ class Homepage extends React.Component<any> {
             <div className="flex justify-end gap-4 pr-4">
                 <div className="sm:flex sm:gap-4">
                     <a
-                        href=""
+                        href="#"
                         className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
                         onClick={() => this.setState({ show: true })}
                     >
@@ -100,7 +101,7 @@ class Homepage extends React.Component<any> {
             <center style={{ paddingTop: "1rem" }}>
                 <div className="inline-flex items-center justify-center gap-3">
                     <a
-                        href=""
+                        href="#"
                         className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
                         onClick={() => {
                             if (this.state.currentPage > 1) {
@@ -131,7 +132,7 @@ class Homepage extends React.Component<any> {
                     </p>
 
                     <a
-                        href=""
+                        href="#"
                         className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
                         onClick={() => {
                             if (this.state.currentPage < this.state.totalPages) {
@@ -160,4 +161,12 @@ class Homepage extends React.Component<any> {
     }
 };
 
-export default Homepage;
+function HomepageWrapper(props: { pageSize: number; }) {
+    const locationState = useLocation().state;
+  
+    return (
+      <Homepage pageSize={props.pageSize} locationState={locationState} />
+    );
+  }
+
+export default HomepageWrapper;
