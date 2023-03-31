@@ -186,21 +186,33 @@ def get_all_property_feedback_comments(request, id):
             return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
         reservations = property.reservations.all()
         comments = []
+        guests = []
         for reservation in reservations:
             feedback = reservation.feedback
             if feedback:
                 feedback_comments = feedback.comment_set.all()
-                earliest_comment = feedback_comments.filter(comment_type="property", sender_type="guest").order_by('last_modified').first()
+                earliest_comment = feedback_comments.filter(comment_type="property", sender_type="guest").order_by('id').first()
                 if earliest_comment:
                     comments.append(earliest_comment)
-        return Response({"message": "success", "data": [{
-            "id": comment.pk,
-            "message": comment.message,
-            "comment_type": comment.comment_type,
-            "sender_type": comment.sender_type,
-            "last_modified": comment.last_modified,
-            "property_rating": comment.feedback.property_rating,
-        } for comment in comments]}, status=status.HTTP_200_OK)
+                    guests.append({
+                        "avatar": reservation.user.avatar.url if reservation.user.avatar else None,
+                        "first_name": reservation.user.first_name,
+                        "last_name": reservation.user.last_name
+                    })
+        
+        data_list = []
+        for comment_num in range(0, len(comments)):
+            data_list.append({
+                "id": comments[comment_num].pk,
+                "message": comments[comment_num].message,
+                "comment_type": comments[comment_num].comment_type,
+                "sender_type": comments[comment_num].sender_type,
+                "last_modified": comments[comment_num].last_modified,
+                "property_rating": comments[comment_num].feedback.property_rating,
+                "guest_info": guests[comment_num]
+            })
+
+        return Response({"message": "success", "data": data_list}, status=status.HTTP_200_OK)
     else:
         return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 

@@ -144,3 +144,22 @@ class UpdateReservationView(UpdateAPIView):
             return Response({"message": "success", "data": response}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+# New
+@api_view(['GET'])
+def get_reservation_by_property_id(request, property_id):
+    if request.user.is_authenticated:
+        try:
+            all_reservations = Property.objects.get(id=property_id).reservations.all()
+        except:
+            return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            "message": "success",
+            "data": [{
+                'id': reservation.id,
+                'start_date': reservation.start_date,
+                'end_date': reservation.end_date
+            } for reservation in all_reservations]}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)

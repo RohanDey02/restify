@@ -49,7 +49,8 @@ def get_property(request, id):
                 'max_number_of_guests': property.max_number_of_guests,
                 'price': property.price,
                 'amenities': property.amenities,
-                'images': [property_image.image.url for property_image in property.propertyimages_set.all()]
+                'images': [property_image.image.url for property_image in property.propertyimages_set.all()],
+                'owner': property.host.username
             }
         })
     else:
