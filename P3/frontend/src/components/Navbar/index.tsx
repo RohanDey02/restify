@@ -71,7 +71,7 @@ function Navbar(props: { currentLocation: string, state: any }) {
                                 <li>
                                     <a
                                         className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
+                                        href="/myreservations"
                                     >
                                         Your Reservations
                                     </a>
