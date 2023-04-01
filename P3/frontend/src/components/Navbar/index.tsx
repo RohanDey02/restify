@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import './style.css';
 
-function Navbar(props: {currentLocation: string, state: any}) {
+function Navbar(props: { currentLocation: string, state: any }) {
     const [destination, setDestination] = useState<string>('');
     const [navigate, setNavigate] = useState<boolean>(false);
-    
+
     const HandleNavigate = (destination: string) => {
         setDestination(destination);
         setNavigate(true);
@@ -85,20 +86,11 @@ function Navbar(props: {currentLocation: string, state: any}) {
                                 className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
                                 href="/"
                             >
-                                Login
+                                Hello, {props.state.data.first_name}!
                             </a>
-
-                            <div className="hidden sm:flex">
-                                <a
-                                    className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-                                    href="/"
-                                >
-                                    Register
-                                </a>
-                            </div>
                         </div>
 
-                        <div className="block md:hidden">
+                        <div className="block md:hidden dropdownNav">
                             <button
                                 className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
                             >
@@ -117,6 +109,34 @@ function Navbar(props: {currentLocation: string, state: any}) {
                                     />
                                 </svg>
                             </button>
+
+                            <div className='dropdownNavContent bg-white'>
+                                <a
+                                    href=""
+                                    className="text-gray-500 transition hover:text-gray-500/75"
+                                    onClick={() => HandleNavigate("/home")}
+                                >
+                                    Home
+                                </a>
+                                <a
+                                    className="text-gray-500 transition hover:text-gray-500/75"
+                                    href="/"
+                                >
+                                    Account
+                                </a>
+                                <a
+                                    className="text-gray-500 transition hover:text-gray-500/75"
+                                    href="/"
+                                >
+                                    Notifications
+                                </a>
+                                <a
+                                    className="text-gray-500 transition hover:text-gray-500/75"
+                                    href="/"
+                                >
+                                    Your Reservations
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,20 @@
+.dropdownNavContent {
+    border-radius: 5px;
+    display: none;
+    font-weight: 600;
+    margin-left: calc(-8vh - 0.5rem);
+    position: absolute;
+    width: fit-content;
+}
+
+.dropdownNavContent a {
+    display: block;
+    float: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+}
+
+.dropdownNav:hover .dropdownNavContent {
+    display: block;
+}
