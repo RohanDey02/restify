@@ -132,12 +132,12 @@ function UpdateAccount() {
     }
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
+        setResp('');
         event.preventDefault();
         UpdateUser();
 
         if (resp !== '') {
             setAlertFlag(true);
-            setResp('');
         }
     };
 
