@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Property from './pages/Property';
 import Register from './pages/Register';
 import MyReservations from './pages/Reservations/MyReservations';
+import AccountHome from './pages/AccountHome';
 
 function App() {
 	return <>
@@ -12,6 +13,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Login />} />
 				<Route path="/home" element={<HomepageWrapper pageSize={10} />} />
+				<Route path="/account/home" element={<AccountHome />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/property" element={<Property />} />
 				<Route path="/myreservations" element={<MyReservations />} />

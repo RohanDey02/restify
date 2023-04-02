@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import './style.css';
 
-function Navbar(props: { currentLocation: string, state: any }) {
+function Navbar(props: { currentLocation: string, firstName: string }) {
     const [destination, setDestination] = useState<string>('');
     const [navigate, setNavigate] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ function Navbar(props: { currentLocation: string, state: any }) {
         if (props.currentLocation === destination) {
             setNavigate(false);
         }
-        return <Navigate to={destination} state={props.state} />
+        return <Navigate to={destination} />
     } else {
         return <header aria-label="Site Header" className="bg-white">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -42,8 +42,8 @@ function Navbar(props: { currentLocation: string, state: any }) {
                             <ul className="flex items-center gap-6 text-sm">
                                 <li>
                                     <a
-                                        href=""
                                         className="text-gray-500 transition hover:text-gray-500/75"
+                                        href=""
                                         onClick={() => HandleNavigate("/home")}
                                     >
                                         Home
@@ -53,7 +53,8 @@ function Navbar(props: { currentLocation: string, state: any }) {
                                 <li>
                                     <a
                                         className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
+                                        href=""
+                                        onClick={() => HandleNavigate("/account/home")}
                                     >
                                         Account
                                     </a>
@@ -86,7 +87,7 @@ function Navbar(props: { currentLocation: string, state: any }) {
                                 className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
                                 href="/"
                             >
-                                Hello, {props.state.data.first_name}!
+                                Hello, {props.firstName}!
                             </a>
                         </div>
 
@@ -112,15 +113,16 @@ function Navbar(props: { currentLocation: string, state: any }) {
 
                             <div className='dropdownNavContent bg-white'>
                                 <a
-                                    href=""
                                     className="text-gray-500 transition hover:text-gray-500/75"
+                                    href=""
                                     onClick={() => HandleNavigate("/home")}
                                 >
                                     Home
                                 </a>
                                 <a
                                     className="text-gray-500 transition hover:text-gray-500/75"
-                                    href="/"
+                                    href=""
+                                    onClick={() => HandleNavigate("/account/home")}
                                 >
                                     Account
                                 </a>
