@@ -225,7 +225,7 @@ class Homepage extends React.Component<any> {
     }
 };
 
-const HomepageWrapper = (props: { pageSize: number; }) => {
+const HomepageWrapper = () => {
     const [data, setData] = useState<any>();
     const [tokens, setTokens] = useState<{ access: string, refresh: string }>();
     const [isLoading, setIsLoading] = useState(true);
@@ -255,9 +255,13 @@ const HomepageWrapper = (props: { pageSize: number; }) => {
             </div>
         </>
     }
+    
+    var remPixels: number = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    var gridWidth: number = window.innerWidth - remPixels;
+    var numCards: number = Math.floor((gridWidth - remPixels) / (300 + remPixels));
 
     return (
-        <Homepage pageSize={props.pageSize} locationState={{ data: data, tokens: tokens }} />
+        <Homepage pageSize={numCards * 2} locationState={{ data: data, tokens: tokens }} />
     );
 }
 

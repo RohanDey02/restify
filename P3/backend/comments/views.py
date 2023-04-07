@@ -195,6 +195,7 @@ def get_all_property_feedback_comments(request, id):
                 if earliest_comment:
                     comments.append(earliest_comment)
                     guests.append({
+                        "username": reservation.user.username,
                         "avatar": reservation.user.avatar.url if reservation.user.avatar else None,
                         "first_name": reservation.user.first_name,
                         "last_name": reservation.user.last_name
@@ -337,5 +338,46 @@ def get_ratings(request, id):
             }}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "error", "details": "Feedback not found"}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def get_associated_reservation(request, id):
+    if request.user.is_authenticated:
+        comment = None
+        try:
+            comment = Comment.objects.get(id=id)
+        except:
+            return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        feedback = comment.feedback
+        if feedback:
+            return Response({"message": "success", "data": {
+                "reservation_id": feedback.reservation.id
+            }}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "error", "details": "Feedback not found"}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def get_all_conversation_comments(request, id):
+    if request.user.is_authenticated:
+        reservation = None
+        try:
+            reservation = Reservation.objects.get(id=id)
+        except:
+            return Response({"message": "error", "details": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
+        comments = []
+        feedback = reservation.feedback
+        if feedback:
+            comments = feedback.comment_set.all().order_by('last_modified')
+        return Response({"message": "success", "data": [{
+            "id": comment.pk,
+            "message": comment.message,
+            "comment_type": comment.comment_type,
+            "sender_type": comment.sender_type,
+            "last_modified": comment.last_modified,
+        } for comment in comments]}, status=status.HTTP_200_OK)
     else:
         return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)

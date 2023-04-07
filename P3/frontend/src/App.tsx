@@ -13,7 +13,7 @@ function App() {
 		<Router>
 			<Routes>
 				<Route path="/" element={<Login />} />
-				<Route path="/home" element={<HomepageWrapper pageSize={10} />} />
+				<Route path="/home" element={<HomepageWrapper />} />
 				<Route path="/account/home" element={<AccountHome />} />
 				<Route path="/account/update" element={<UpdateAccount />} />
 				<Route path="/register" element={<Register />} />

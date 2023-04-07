@@ -7,23 +7,62 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
     var { show, handleClose } = props;
     const serviceFeeRate: number = 1.07;
     const [numDays, setNumDays] = useState<number>(1);
+    const [numWeekendDays, setNumWeekendDays] = useState<number>(1);
     const [basePrice, setBasePrice] = useState<number>(isNaN(props.price) ? 0 : props.price);
     const [totalPrice, setTotalPrice] = useState<number>(isNaN(props.price) ? 0 : basePrice * 1.13 * serviceFeeRate);
+    const [discountAmount, setDiscountAmount] = useState<number>(0);
+    const [discountType, setDiscountType] = useState<string>('');
+    const [breakdown, setBreakdown] = useState<{ [key: string]: number }>({});
     const [numGuests, setNumGuests] = useState<number>(0);
-    const [blockedDates, setBlockedDates] = useState<{startDate: string, endDate: string}[]>([]);
+    const [blockedDates, setBlockedDates] = useState<{ startDate: string, endDate: string }[]>([]);
     const [date, setDate] = useState({
         startDate: new Date(),
         endDate: new Date()
     });
 
     const handleSetDate = (value: any) => {
+        let tempStartDate: Date = new Date(value.startDate);
+        tempStartDate.setDate(tempStartDate.getDate() + 1);
+        let tempEndDate: Date = new Date(value.endDate);
+        tempEndDate.setDate(tempEndDate.getDate() + 1);
+
+        let dayBreakdown: { [key: string]: number } = {};
+        let count: number = 0;
+
+        while (tempStartDate <= tempEndDate) {
+            if (tempStartDate.getDay() === 0 || tempStartDate.getDay() === 6) {
+                dayBreakdown[tempStartDate.toDateString()] = Math.round(props.price * 1.1 * 100) / 100;
+                count++;
+            } else {
+                dayBreakdown[tempStartDate.toDateString()] = Math.round(props.price * 100) / 100;
+            }
+
+            tempStartDate.setDate(tempStartDate.getDate() + 1);
+        }
+
+        setNumWeekendDays(count);
         setDate(value);
+        setBreakdown(dayBreakdown);
+
         var days: number = Math.ceil((new Date(value.endDate).getTime() - new Date(value.startDate).getTime()) / (1000 * 3600 * 24)) + 1;
-        var base: number = days * props.price;
-        var total: number = base * 1.13 * serviceFeeRate;
+        var base: number = Object.values(dayBreakdown).reduce((acc: number, val: number) => acc + val, 0);
+        var discountAmt: number = 0;
+        var discount: string = '';
+        
+        if (days / 31 >= 1) {
+            discount = 'Monthly';
+            discountAmt = base * 0.10;
+        } else if (days / 7 >= 1) {
+            discount = 'Weekly';
+            discountAmt = base * 0.05;
+        }
+        
+        var total: number = (base - discountAmt) * 1.13 * serviceFeeRate;
         setNumDays(days);
-        setBasePrice(base);
+        setBasePrice(base - discountAmt);
         setTotalPrice(total);
+        setDiscountAmount(discountAmt);
+        setDiscountType(discount);
     };
 
     const GetBlockedDates = async (): Promise<any> => {
@@ -41,7 +80,7 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
             }
 
             const data = await response.json();
-            var toBeSavedData: {startDate: string, endDate: string}[] = data.data.map((x: { id: any; start_date: any; end_date: any; }) => {
+            var toBeSavedData: { startDate: string, endDate: string }[] = data.data.map((x: { id: any; start_date: any; end_date: any; }) => {
                 return {
                     startDate: x.start_date,
                     endDate: x.end_date
@@ -55,6 +94,16 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
             console.error('There was a problem with the fetch request:', error);
             throw error;
         }
+    }
+
+    const CreateFormattedBreakdown = () => {
+        var liBreakdown: any = [];
+
+        for (const elem in breakdown) {
+            liBreakdown.push(<li>{elem} - ${breakdown[elem]}</li>);
+        }
+
+        return liBreakdown;
     }
 
     useEffect(() => {
@@ -178,7 +227,7 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
                                     />
                                 </span>
                             </p>
-                            
+
 
                             <Dialog.Title
                                 as="h3"
@@ -188,9 +237,17 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
                             </Dialog.Title>
 
                             <h3 className='text-md font-semibold text-gray-900'>Rate:</h3>
-                            <p className='pb-2'>${props.price}/night * {numDays} nights</p>
+                            <p className='pb-2'>${props.price}/night * {numDays - numWeekendDays} weekday night(s){numWeekendDays !== 0 ? ` and $${Math.round(props.price * 1.1 * 100) / 100}/night * ${numWeekendDays} weekend night(s)` : ""}</p>
                             <h3 className='text-md font-semibold text-gray-900'>Base Price:</h3>
-                            <p className='pb-2'>${Math.round(basePrice * 100) / 100}</p>
+                            <details className='pb-2'>
+                                <summary>${Math.round(basePrice * 100) / 100}</summary>
+                                <p className='text-xs md:text-sm leading-none text-gray-600 mt-2'>Cost Per Night:</p>
+                                <ul className='text-xs md:text-sm leading-none text-gray-600 mt-2'>
+                                    {CreateFormattedBreakdown()}
+                                </ul>
+                                {discountType !== '' ? <p className='text-xs md:text-sm leading-none text-gray-600 mt-2'>{discountType} Discount ({discountType === 'Monthly' ? '10%' : '5%'}): {Math.round(discountAmount * 100) / 100}</p> : <></>}
+                                {/* TODO: Do it here */}
+                            </details>
                             <h3 className='text-md font-semibold text-gray-900'>Total Price (Base Price x 13% HST x 7% Restify Service Rate):</h3>
                             <p className='pb-2'>${Math.round(totalPrice * 100) / 100}</p>
 
