@@ -76,7 +76,7 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                console.error('Network response was not ok');
             }
 
             const data = await response.json();
@@ -91,8 +91,7 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
                 setBlockedDates(toBeSavedData);
             }
         } catch (error) {
-            console.error('There was a problem with the fetch request:', error);
-            throw error;
+            console.log('There was a problem with the fetch request:');
         }
     }
 

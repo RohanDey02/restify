@@ -37,8 +37,8 @@ function AccountHome() {
     return <>
         <Navbar currentLocation='/account/home' firstName={data.first_name} />       
         <div className='cards-grid'>
-            <Card description='Update your personal data' destination='/account/update' image={PersonalInfoCardImage} title='Personal Information' />
-            <Card description='Check the status and details of existing and potential reservations' destination='/account/home' image={PersonalInfoCardImage} title='Reservations' />
+            <Card currentLocation='/account/home' description='Update your personal data' destination='/account/update' image={PersonalInfoCardImage} title='Personal Information' />
+            <Card currentLocation='/account/home' description='Check the status and details of existing and potential reservations' destination='/account/home' image={PersonalInfoCardImage} title='Reservations' />
         </div>
     </>
 }

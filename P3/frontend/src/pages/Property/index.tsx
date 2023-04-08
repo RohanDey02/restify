@@ -27,9 +27,14 @@ function Property() {
 	const [totalRating, setTotalRating] = useState<number>(5);
 	const [images, setImages] = useState<any[]>([]);
 	const [comments, setComments] = useState<any[]>([]);
+	const [paginatedComments, setPaginatedComments] = useState<any[]>([]);
 	const [show, setShow] = useState<boolean>(false);
 	const [showCommentsModal, setShowCommentsModal] = useState<boolean>(false);
 	const [showCommentData, setShowCommentData] = useState<{id: number, name: string, commenterUsername: string, propertyRating: number, avatar: any}>({id: -1, name: "None", commenterUsername: "None", propertyRating: -1, avatar: "None"});
+
+	const [currentCommentsPage, setCurrentCommentsPage] = useState<number>(1);
+	const currentCommentsPageSize: number = 5;
+	const [totalCommentsPage, setTotalCommentsPage] = useState<number>(1);
 
 	const [searchModalState, setSearchModalState] = useState<any>('');
 	const [bookingAlert, setBookingAlert] = useState<string>('');
@@ -63,7 +68,7 @@ function Property() {
 				}
 			}
 		} catch (error) {
-			console.error('There was a problem with the fetch request:', error);
+			console.error('There was a problem with the fetch request:');
 			throw error;
 		}
 	};
@@ -89,7 +94,7 @@ function Property() {
 				}
 			}
 		} catch (error) {
-			console.error('There was a problem with the fetch request:', error);
+			console.error('There was a problem with the fetch request');
 			throw error;
 		}
 	};
@@ -118,7 +123,7 @@ function Property() {
 				}
 			}
 		} catch (error) {
-			console.error('There was a problem with the fetch request:', error);
+			console.error('There was a problem with the fetch request:');
 			throw error;
 		}
 	};
@@ -154,11 +159,14 @@ function Property() {
 
 					if (JSON.stringify(comments) !== JSON.stringify(dataComments)) {
 						setComments(dataComments);
+						setPaginatedComments(dataComments.slice(0, currentCommentsPageSize));
+						console.log(dataComments.slice(0, currentCommentsPageSize));
+						setTotalCommentsPage(Math.ceil(data.count / currentCommentsPageSize));
 					}
 				}
 			}
 		} catch (error) {
-			console.error('There was a problem with the fetch request:', error);
+			console.error('There was a problem with the fetch request:');
 			throw error;
 		}
 	};
@@ -198,7 +206,7 @@ function Property() {
 				}
 			}
 		} catch (error) {
-			console.error('There was a problem with the fetch request:', error);
+			console.error('There was a problem with the fetch request:');
 			throw error;
 		}
 	};
@@ -225,6 +233,10 @@ function Property() {
 			GetComments(id);
 		}		
 	}, [data, tokens])
+
+	useEffect(() => {
+		setPaginatedComments(comments.slice((currentCommentsPage - 1) * currentCommentsPageSize, (currentCommentsPage - 1) * currentCommentsPageSize + (currentCommentsPageSize)))
+	}, [currentCommentsPage])
 
 	useEffect(() => {
 		if (property !== '') {
@@ -280,8 +292,8 @@ function Property() {
 	}
 
 	function GenerateComments() {
-		if (comments.length !== 0) {
-			return comments.map((comment: { id: number; commenterUsername: string; message: string; property_rating: number; avatar: string; first_name: string; last_modified: string; last_name: string }) => {
+		if (paginatedComments.length !== 0) {
+			return paginatedComments.map((comment: { id: number; commenterUsername: string; message: string; property_rating: number; avatar: string; first_name: string; last_modified: string; last_name: string }) => {
 				var commentId: string = `comment-${comment.id}`;
 
 				return <tr className={commentId} onClick={() => HandleOpenCommentModal(comment.id, `${comment.first_name} ${comment.last_name}`, comment.commenterUsername, comment.property_rating, comment.avatar !== undefined ? comment.avatar : DefaultAvatar)}>
@@ -394,6 +406,65 @@ function Property() {
 					</table>
 				</div>
 			</div>
+
+			{/* Pagination */}
+			<center style={{ paddingTop: "1rem" }}>
+                <div className="inline-flex items-center justify-center gap-3">
+                    <a
+                        href="#"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
+                        onClick={(event) => {
+                            if (currentCommentsPage > 1) {
+                                setCurrentCommentsPage(currentCommentsPage - 1);
+                            }
+                            BlockCrashingFromNoNavigation(event);
+                        }}
+                    >
+                        <span className="sr-only">Next Page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clipRule="evenodd" />
+                        </svg>
+                    </a>
+
+                    <p className="text-xs">
+                        {currentCommentsPage}
+                        <span className="mx-0.25">/</span>
+                        {totalCommentsPage}
+                    </p>
+
+                    <a
+                        href="#"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
+                        onClick={(event) => {
+                            if (currentCommentsPage < totalCommentsPage) {
+                                setCurrentCommentsPage(currentCommentsPage + 1);
+                            }
+                            BlockCrashingFromNoNavigation(event);
+                        }}
+                    >
+                        <span className="sr-only">Next Page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clipRule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </center>
 		</div>
 	</>
 }

@@ -140,7 +140,7 @@ class Homepage extends React.Component<any> {
         return <>
             <Navbar currentLocation='/home' firstName={this.state.locationState.data.first_name} />
 
-            <div className="flex justify-end gap-4 pr-4">
+            <div className="flex justify-end gap-4 pr-4 pb-4">
                 <div className="sm:flex sm:gap-4">
                     <a
                         href="#"

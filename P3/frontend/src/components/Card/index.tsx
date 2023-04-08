@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import { Navigate } from 'react-router-dom';
 
-function Card(props: {description: string, destination: string, image: string, title: string}) {
+function Card(props: {currentLocation: string, description: string, destination: string, image: string, title: string}) {
     const [navigate, setNavigate] = useState<boolean>(false);
 
     const HandleNavigate = () => {
         setNavigate(true);
     }
 
-    if (navigate) {
+    if (navigate && props.currentLocation !== props.destination) {
+        setNavigate(false);
         return <Navigate to={props.destination} />
     } else {
         return <a href="" className="block rounded-lg p-4 shadow-sm shadow-indigo-100 hover:shadow-[0_8px_16px_0_rgba(0,0,0,0.2)]" onClick={() => HandleNavigate()}>

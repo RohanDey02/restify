@@ -32,37 +32,9 @@ function CommentsModal(props: { show: boolean; handleClose: any; onModalSubmit: 
         .then(otherData => {
             setPropertyConversationComments(otherData.data);
             setLastSenderType(otherData.data.at(-1).sender_type);
-        }).catch(error => {
-            console.error('There was a problem with the fetch request:', error);
+        }).catch(() => {
+            console.error('There was a problem with the fetch request:');
         });
-    };
-
-    async function GetConversationComments(reservationId: number): Promise<any> {
-        try {
-            const response = await fetch(`/comments/${reservationId}/allConversationComments`, {
-                method: "GET",
-                headers: {
-                    'Authorization': `Bearer ${props.accessToken}`,
-                    'Content-type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                console.error('There was a problem with the fetch request:', response.status);
-            } else {
-                const data = await response.json();
-
-                if (data.data.length !== 0) {
-                    if (JSON.stringify(propertyConversationComments) !== JSON.stringify(data.data)) {
-                        setPropertyConversationComments(data.data);
-                        setLastSenderType(data.data.at(-1).sender_type);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('There was a problem with the fetch request:', error);
-            throw error;
-        }
     };
 
     async function PostReply() {
@@ -101,7 +73,7 @@ function CommentsModal(props: { show: boolean; handleClose: any; onModalSubmit: 
                 }
             }
         } catch (error) {
-            console.error('There was a problem with the fetch request:', error);
+            console.error('There was a problem with the fetch request:');
             throw error;
         }
     }

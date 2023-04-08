@@ -1,8 +1,11 @@
 from datetime import datetime
+from rest_framework.generics import ListAPIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from .serializers import CommentsSerializer
+from .pagination import CommentsPagination
 from accounts.models import RestifyUser
 
 from comments.models import Comment, Feedback
@@ -176,14 +179,17 @@ class CreateComment(APIView):
         else:
             return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['GET'])
-def get_all_property_feedback_comments(request, id):
-    if request.user.is_authenticated:
+class GetAllPropertyFeedbackComments(ListAPIView):
+    serializer_class = CommentsSerializer
+    pagination_class = CommentsPagination
+
+    def get_queryset(self):
         property = None
         try:
-            property = Property.objects.get(id=id)
+            property = Property.objects.get(id=self.kwargs["id"])
         except:
-            return Response({"message": "error", "details": "Property not found"}, status=status.HTTP_404_NOT_FOUND)
+            return []
+
         reservations = property.reservations.all()
         comments = []
         guests = []
@@ -213,9 +219,7 @@ def get_all_property_feedback_comments(request, id):
                 "guest_info": guests[comment_num]
             })
 
-        return Response({"message": "success", "data": data_list}, status=status.HTTP_200_OK)
-    else:
-        return Response({"message": "error", "details": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+        return data_list
 
 @api_view(['GET'])
 def get_all_guest_feedback_comments(request, id):
