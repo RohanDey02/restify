@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Property } from '../../assets/types/Property';
-import NoImage from '../../assets/images/no-image.png';
+import { Property } from '../../../assets/types/Property';
+import NoImage from '../../../assets/images/no-image.png';
 
 function PropertyCard(props: { property: Property, state: any }) {
     const [destination, setDestination] = useState<string>('/');

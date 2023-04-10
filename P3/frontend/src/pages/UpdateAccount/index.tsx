@@ -38,6 +38,12 @@ function UpdateAccount() {
         setPhoneNumber(data.phone_number);
     }, [data, tokens]);
 
+    useEffect(() => {
+        if (resp !== '') {
+            setAlertFlag(true);
+        }
+    }, [resp]);
+
     async function UpdateUser(): Promise<any> {
         const bodyToBeUsed: FormData = new FormData();
         
@@ -132,7 +138,6 @@ function UpdateAccount() {
     }
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
-        setResp('');
         event.preventDefault();
         UpdateUser();
 

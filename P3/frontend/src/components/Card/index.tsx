@@ -9,7 +9,6 @@ function Card(props: {currentLocation: string, description: string, destination:
     }
 
     if (navigate && props.currentLocation !== props.destination) {
-        setNavigate(false);
         return <Navigate to={props.destination} />
     } else {
         return <a href="" className="block rounded-lg p-4 shadow-sm shadow-indigo-100 hover:shadow-[0_8px_16px_0_rgba(0,0,0,0.2)]" onClick={() => HandleNavigate()}>

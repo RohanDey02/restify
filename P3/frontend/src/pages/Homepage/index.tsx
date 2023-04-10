@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from "react-router-dom";
 import { Property } from '../../assets/types/Property';
-import PropertyCard from '../../components/PropertyCard';
+import PropertyCard from '../../components/Card/PropertyCard';
 import SearchModal from '../../components/SearchModal';
 import Navbar from '../../components/Navbar';
 

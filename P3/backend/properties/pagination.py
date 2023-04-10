@@ -26,3 +26,8 @@ class HostPropertySearchPagination(PageNumberPagination):
                 return super(self.__class__, self).paginate_queryset(queryset, request, view)
         else:
             raise serializers.ValidationError({"message": "error", "details": "Unauthorized access"})
+        
+    def get_paginated_response(self, data):
+        response = super().get_paginated_response(data)
+        response.data['results'] = map(lambda x: {**x, 'images': [property_image.image.url for property_image in Property.objects.get(id=x['id']).propertyimages_set.all()]}, response.data['results'])
+        return response

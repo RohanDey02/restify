@@ -108,7 +108,7 @@ class UpdatePropertySerializer(ModelSerializer):
             raise ValidationError(validation_errors)
         else:
             property_image_objs = []
-            if images is not None:
+            if images is not None and images != []:
                 if not all([type(elem) == InMemoryUploadedFile for elem in images]):
                     validation_errors['images'] = "Not all images are files"
                 else:

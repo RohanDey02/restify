@@ -3,7 +3,7 @@ import Navbar from '../../components/Navbar';
 import Card from '../../components/Card';
 import PersonalInfoCardImage from '../../assets/images/PersonalInfoCardImage.jpg';
 
-function AccountHome() {
+function ListingHome() {
     const [data, setData] = useState<any>('');
     const [tokens, setTokens] = useState<{ access: string, refresh: string }>({access: '', refresh: ''});
     const [isLoading, setIsLoading] = useState(true);
@@ -35,13 +35,12 @@ function AccountHome() {
     }
 
     return <>
-        <Navbar currentLocation='/account/home' firstName={data.first_name} />       
+        <Navbar currentLocation='/listing/home' firstName={data.first_name} />       
         <div className='cards-grid'>
-            <Card currentLocation='/account/home' description='Update your personal data' destination='/account/update' image={PersonalInfoCardImage} title='Personal Information' />
-            <Card currentLocation='/account/home' description='Check the status and details of existing and potential reservations' destination='/account/home' image={PersonalInfoCardImage} title='Reservations' />
-            {data.account_type === "Host" ? <Card currentLocation='/account/home' description='Create, update or delete your listings' destination='/listing/home' image={PersonalInfoCardImage} title='Manage Your Listings' /> : <></>}
+            <Card currentLocation='/listing/home' description='Create a new listing to be posted on Restify' destination='/listing/create' image={PersonalInfoCardImage} title='Create A New Listing' />
+            <Card currentLocation='/listing/home' description='Update or delete an existing Restify listing' destination='/listing/manage' image={PersonalInfoCardImage} title='Manage Existing Listings' />
         </div>
     </>
 }
 
-export default AccountHome;
+export default ListingHome;
