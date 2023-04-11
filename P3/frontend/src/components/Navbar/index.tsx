@@ -61,7 +61,7 @@ function Navbar(props: { currentLocation: string, firstName: string }) {
                                 <li>
                                     <a
                                         className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
+                                        href="/mynotifications"
                                     >
                                         Notifications
                                     </a>
@@ -136,7 +136,7 @@ function Navbar(props: { currentLocation: string, firstName: string }) {
                                 </a>
                                 <a
                                     className="text-gray-500 transition hover:text-gray-500/75"
-                                    href="/"
+                                    href="/mynotifications"
                                 >
                                     Notifications
                                 </a>

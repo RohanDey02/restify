@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Property from './pages/Property';
 import Register from './pages/Register';
 import MyReservations from './pages/Reservations/MyReservations';
+import MyNotifications from './pages/Notifications/MyNotifications';
 import AccountHome from './pages/AccountHome';
 import UpdateAccount from './pages/UpdateAccount';
 import ListingHome from './pages/ListingsHome';
@@ -25,6 +26,7 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/property" element={<Property />} />
 				<Route path="/myreservations" element={<MyReservations />} />
+				<Route path="/mynotifications" element={<MyNotifications />} />
 			</Routes>
 		</Router>
 	</>
