@@ -21,7 +21,7 @@ class GetReservations(ListAPIView):
         # Get query params and validate
         user_type = self.request.query_params.get("user")
         if user_type:
-            user_type = user_type.strip().lower()
+            user_type = user_type.strip().lower().capitalize()
         state = self.request.query_params.get("state")
         if state:
             state = state.strip().lower()
@@ -34,7 +34,7 @@ class GetReservations(ListAPIView):
         if user_type and state:
             reservations = Reservation.objects.filter(user__account_type=user_type, status=state)
         elif state:
-            reservations = Reservation.objects.filter(status=state)
+            reservations = Reservation.objects.filter(status=state.capitalize())
         elif user_type:
             # fix this so that we filter by account_type
             reservations = Reservation.objects.filter(user__account_type=user_type)
@@ -90,7 +90,7 @@ class GetUserReservations(ListAPIView):
                 reservations = Reservation.objects.filter(user=self.request.user, status=state)
             else:
                 reservations = Reservation.objects.filter(user=self.request.user)
-        
+
         return reservations
 
 # Creating a reservation
