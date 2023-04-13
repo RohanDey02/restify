@@ -4,6 +4,7 @@ import HomepageWrapper from './pages/Homepage';
 import Login from './pages/Login';
 import Property from './pages/Property';
 import Register from './pages/Register';
+import InitialRating from './pages/InitialRating/InitialRating';
 import MyReservations from './pages/Reservations/MyReservations';
 import MyNotifications from './pages/Notifications/MyNotifications';
 import AccountHome from './pages/AccountHome';
@@ -25,6 +26,7 @@ function App() {
 				<Route path="/listing/manage" element={<ManageListing />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/property" element={<Property />} />
+				<Route path="/initialrating/:reservationId" element={<InitialRating />} />
 				<Route path="/myreservations" element={<MyReservations />} />
 				<Route path="/mynotifications" element={<MyNotifications />} />
 			</Routes>
