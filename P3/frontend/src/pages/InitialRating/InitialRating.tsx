@@ -41,7 +41,6 @@ function InitialRating() {
 				const data = await response.json();
 
 				if (JSON.stringify(reservation) !== JSON.stringify(data.data)) {
-                    console.log(data.data);
 					setReservation(data.data);
 				}
 			}
