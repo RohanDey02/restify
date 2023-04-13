@@ -42,7 +42,7 @@ def all_users(request, acc_type):
         })
     else:
         return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
-
+    
 @api_view(['GET', 'DELETE'])
 def user(request, username):
     if request.method == "GET":
@@ -70,6 +70,26 @@ def user(request, username):
             else:
                 user.delete()
                 return Response({"message": "success", "details": "User has been successfully deleted"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def user_by_id(request, id):
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            try:
+                user = RestifyUser.objects.get(id=id)
+                return Response({"message": "success", "data": {
+                    'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email,
+                    'phone_number': user.phone_number,
+                    'account_type': user.account_type,
+                    'avatar': user.avatar.url if user.avatar else None
+                }}, status=status.HTTP_200_OK)
+            except:
+                return Response({"message": "error", "details": "Invalid user or user not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
 

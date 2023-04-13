@@ -9,9 +9,19 @@ function NotificationCard(props: { notification: Notification, setSelectedNotifi
                 <p className="text-sm font-medium text-gray-500">{props.notification.title}</p>
                 <p className="text-sm text-gray-500">{props.notification.description}</p>
                 {!props.selected ?
-                    <button onClick={() => props.setSelectedNotification()}>Expand Notification</button> 
+                    <button 
+                        onClick={() => props.setSelectedNotification()}
+                        className="hidden rounded-md transition sm:block bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+                        >
+                        Expand Notification
+                    </button> 
                     : 
-                    <button onClick={() => props.handleNotificationDelete()}>Delete Notification</button>
+                    <button 
+                        onClick={() => props.handleNotificationDelete()}
+                        className="hidden rounded-md transition sm:block bg-red-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+                        >
+                        Delete Notification
+                    </button>
                 }
             </div>
         </div>

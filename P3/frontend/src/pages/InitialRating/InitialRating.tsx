@@ -11,6 +11,8 @@ function InitialRating() {
     const [rating, setRating] = useState<number>(0);
     const [message, setMessage] = useState<string>('');
     const { reservationId } = useParams();
+    const [user, setUser] = useState<any>('');
+    const [property, setProperty] = useState<any>('');
     const [reservation, setReservation] = useState<Reservation>({
         id: 0,
         start_date: new Date(),
@@ -23,6 +25,56 @@ function InitialRating() {
 
     const HandleNavigate = () => {
         setNavigate(true);
+    }
+
+    async function GetProperty(property_id: number): Promise<any> {
+        try {
+            const response = await fetch(`/property/${property_id}`, {
+                method: "GET",
+                headers: {
+					'Authorization': `Bearer ${tokens.access}`,
+					'Content-type': 'application/json'
+				}
+			});
+
+            if (!response.ok) {
+				console.error('An error has occurred!');
+			} else {
+				const data = await response.json();
+
+				if (JSON.stringify(property) !== JSON.stringify(data.data)) {
+					setProperty(data.data);
+				}
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch request:');
+			throw error;
+		}
+    }
+
+    async function GetUser(user_id: number): Promise<any> {
+        try {
+			const response = await fetch(`/accounts/id/${user_id}`, {
+				method: "GET",
+				headers: {
+					'Authorization': `Bearer ${tokens.access}`,
+					'Content-type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				console.error('An error has occurred!');
+			} else {
+				const data = await response.json();
+
+				if (JSON.stringify(user) !== JSON.stringify(data.data)) {
+					setUser(data.data);
+				}
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch request:');
+			throw error;
+		}
     }
 
     async function GetReservation(): Promise<any> {
@@ -42,6 +94,8 @@ function InitialRating() {
 
 				if (JSON.stringify(reservation) !== JSON.stringify(data.data)) {
 					setReservation(data.data);
+                    GetUser(data.data.user);
+                    GetProperty(data.data.property);
 				}
 			}
 		} catch (error) {
@@ -122,22 +176,24 @@ function InitialRating() {
     return <>
         <Navbar currentLocation='/myreservations' firstName={data.first_name} />
         <div style={{ display: 'flex', flexDirection: 'column', width: '50%', margin: 'auto' }}>
-            <h1 className="text-center text-2xl font-bold text-teal-700 sm:text-3xl">
-                {data.account_type === 'Host' ? 'How was your guest?' : 'How was your stay?'}
-            </h1>
+            {data.account_type === 'Host' ?
+                <h1 className="text-center text-2xl font-bold text-teal-700 sm:text-3xl mb-1">Review {user.first_name}'s Stay at {property.title}</h1>
+                :
+                <h1 className="text-center text-2xl font-bold text-teal-700 sm:text-3xl mb-1">Review Your Stay At {property.title}</h1>}
             {data.account_type === 'Host' ?
                 <p className="text-left text-base font-bold text-teal-700 sm:text-lg">Rate Guest's Stay: {rating}/5</p>
                 :
                 <p className="text-left text-base font-bold text-teal-700 sm:text-lg">Rate Your Stay: {rating}/5</p>
             }
             <input type="range" min="0" max="5" onChange={(event) => setRating(parseFloat(event.target.value))} value={rating.toString()} width="1px"></input>
-            <p className="text-left text-base font-bold text-teal-700 sm:text-lg">Comments:</p>
+            <p className="text-left text-base font-bold text-teal-700 sm:text-lg mt-1">Comments:</p>
             <TextField
                 multiline
                 rows={4}
                 variant="outlined"
                 onChange={(event) => setMessage(event.target.value)}
                 value={message}
+                style={{ marginBottom: '1rem' }}
             />
             <button
                 className="hidden rounded-md transition sm:block bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
