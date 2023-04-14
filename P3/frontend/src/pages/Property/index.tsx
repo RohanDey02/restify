@@ -364,7 +364,7 @@ function Property() {
 				<div className='smMax:pt-4 smMax:pb-2'>
 					<div className="flex justify-end gap-4 pr-4">
 						<div className="sm:flex sm:gap-4">
-							<a
+							{data.username !== hostUsername ? <a
 								href="#"
 								className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
 								onClick={(event) => {
@@ -373,7 +373,7 @@ function Property() {
 								}}
 							>
 								Book Now
-							</a>
+							</a> : <></>}
 						</div>
 					</div>
 				</div>

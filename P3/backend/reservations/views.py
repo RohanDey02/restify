@@ -169,7 +169,8 @@ def get_reservation_by_property_id(request, property_id):
             "data": [{
                 'id': reservation.id,
                 'start_date': reservation.start_date,
-                'end_date': reservation.end_date
+                'end_date': reservation.end_date,
+                'status': reservation.status
             } for reservation in all_reservations]}, status=status.HTTP_200_OK)
     else:
         return Response({"message": "error", "details": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)

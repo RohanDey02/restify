@@ -80,7 +80,7 @@ function BookingModal(props: { show: boolean; handleClose: any; onModalSubmit: (
             }
 
             const data = await response.json();
-            var toBeSavedData: { startDate: string, endDate: string }[] = data.data.map((x: { id: any; start_date: any; end_date: any; }) => {
+            var toBeSavedData: { startDate: string, endDate: string }[] = data.data.filter((x: { id: any; start_date: any; end_date: any; status: any; }) => x.status !== "Terminated" && x.status !== "Cancelled" ).map((x: { id: any; start_date: any; end_date: any; }) => {
                 return {
                     startDate: x.start_date,
                     endDate: x.end_date

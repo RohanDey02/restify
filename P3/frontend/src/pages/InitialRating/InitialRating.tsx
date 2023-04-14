@@ -13,7 +13,7 @@ function InitialRating() {
     const { reservationId } = useParams();
     const [user, setUser] = useState<any>('');
     const [property, setProperty] = useState<any>('');
-    const [reservation, setReservation] = useState<Reservation>({
+    const [reservation, setReservation] = useState<{id: number, start_date: Date, end_date: Date, feedback: number, user: number, property: number}>({
         id: 0,
         start_date: new Date(),
         end_date: new Date(),
