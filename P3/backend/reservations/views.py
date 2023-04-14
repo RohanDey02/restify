@@ -32,9 +32,9 @@ class GetReservations(ListAPIView):
             state = None
         reservations = None
         if user_type and state:
-            reservations = Reservation.objects.filter(user__account_type=user_type, status=state)
+            reservations = Reservation.objects.filter(user__account_type=user_type, status=state.capitalize())
         elif state:
-            reservations = Reservation.objects.filter(status=state)
+            reservations = Reservation.objects.filter(status=state.capitalize())
         elif user_type:
             # fix this so that we filter by account_type
             reservations = Reservation.objects.filter(user__account_type=user_type)
@@ -76,21 +76,31 @@ class GetUserReservations(ListAPIView):
     def get_queryset(self):
         reservations = None
         state = self.request.query_params.get("state")
+        user_type = self.request.query_params.get("userType")
         if state:
             state = state.strip().lower()
         if state not in ["pending", "denied", "approved", "cancelled", "completed", "terminated"]:
             state = None
+        if user_type:
+            user_type = user_type.strip().lower()
+        if user_type not in ["host", "user"]:
+            user_type = None
         if self.request.user.account_type == "Host":
-            if state:
-                reservations = Reservation.objects.filter(property__host=self.request.user, status=state)
+            if state and user_type and user_type == "user":
+                reservations = Reservation.objects.filter(user=self.request.user, status=state.capitalize())
+            elif user_type and user_type == "user":
+                reservations = Reservation.objects.filter(user=self.request.user)
+            elif state:
+                reservations = Reservation.objects.filter(property__host=self.request.user, status=state.capitalize())
             else:
                 reservations = Reservation.objects.filter(property__host=self.request.user)
+
         else:
             if state:
-                reservations = Reservation.objects.filter(user=self.request.user, status=state)
+                reservations = Reservation.objects.filter(user=self.request.user, status=state.capitalize())
             else:
                 reservations = Reservation.objects.filter(user=self.request.user)
-        
+
         return reservations
 
 # Creating a reservation
@@ -100,12 +110,12 @@ class CreateReservationView(APIView):
     def post(self, request: HttpRequest, property_id):
         if not request.user.is_authenticated:
             return Response({"message": "error", "details": "Please login to book a reservation!"}, status=status.HTTP_401_UNAUTHORIZED)
-        if request.user.account_type == "Host":
-            return Response({"message": "error", "details": "Hosts cannot book a reservation!"}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             property = Property.objects.get(id=property_id)
         except Property.DoesNotExist:
             return Response({"message": "error", "details": "Property does not exist!"}, status=status.HTTP_404_NOT_FOUND)
+        if request.user == property.host:
+            return Response({"message": "error", "details": "You cannot book your own property!"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = CreateReservationSerializer(data=request.data)
         if serializer.is_valid():
             res = serializer.save(request.user, property)
