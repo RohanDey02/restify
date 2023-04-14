@@ -52,6 +52,7 @@ export default function MyReservations() {
 	const [selectedRes, setSelectedRes] = useState<Reservation | null>(null);
 	const access_token = tokens.access;
 	const [pageNum, setPageNum] = useState(1);
+    const [entriesPerPage, setEntriesPerPage] = useState(3);
 	const [nextExists, setNextExists] = useState(true);
     const [openFiltering, setOpenFiltering] = useState(false);
     const box_style = {
@@ -74,7 +75,7 @@ export default function MyReservations() {
 	const { reservations, setReservations } = useGetMyReservations(
 		access_token,
 		pageNum,
-		3,
+		entriesPerPage,
 		setNextExists,
         filteringInfo
 	);
@@ -118,16 +119,16 @@ export default function MyReservations() {
                 onClose={() => setOpenFiltering(false)}
             >
                 <Box sx={box_style}>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-4">
                         <div className="flex flex-col">
-                            <label className="text-center">Sort By</label>
+                            <label className="font-semibold">Sort By</label>
                             <select value={filteringInfo.sortBy} onChange={e => setFilteringInfo({...filteringInfo, sortBy: e.target.value})}>
                                 <option value="Start Date">Start Date</option>
                                 <option value="Status">Status</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
-                            <label className="text-center">Status</label>
+                            <label className="font-semibold">Status</label>
                             <select value={filteringInfo.stateToFilterBy} onChange={e => setFilteringInfo({...filteringInfo, stateToFilterBy: e.target.value})}>
                                 <option value=""></option>
                                 <option value="Pending">Pending</option>
@@ -138,8 +139,12 @@ export default function MyReservations() {
                                 <option value="Denied">Denied</option>
                             </select>
                         </div>
+                        <div className="flex flex-col">
+                            <label className="font-semibold">Entries Per Page</label>
+                            <input value={entriesPerPage} onChange={e => setEntriesPerPage(e.target.valueAsNumber)} type="number" min={1} />
+                        </div>
                         {data.account_type === "Host" && <div className="flex flex-col">
-                            <label className="text-center">User Type</label>
+                            <label className="font-semibold">User Type</label>
                             <select value={filteringInfo.userType} onChange={
                                 e => {
                                     setFilteringInfo({...filteringInfo, userType: e.target.value})
