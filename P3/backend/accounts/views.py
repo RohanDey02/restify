@@ -158,6 +158,7 @@ def login(request):
             access_token = AccessToken.for_user(user)
             refresh_token = RefreshToken.for_user(user)
             return Response({"message": "success", "data": {
+                'id': user.id,
                 'username': user.username,
                 'password': request.data['password'],
                 'first_name': user.first_name,
