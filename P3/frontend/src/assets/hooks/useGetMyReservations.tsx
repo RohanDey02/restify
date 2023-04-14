@@ -1,26 +1,46 @@
 import { useEffect, useState } from "react";
 import { Reservation } from "../types/Reservation";
-const API_ROOT = "http://localhost:8000"
-export const useGetMyReservations = (token: string) => {
-    const [reservations, setReservations] = useState<Reservation[]>([]);
-    const getMyReservations = async () => {
-        const res = await fetch(`${API_ROOT}/reservations/mine/`, {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-        if (res.ok){
-            setReservations(await res.json());
-            console.log("Reservations successfully fetched");
-            return;
-        }
-        // Error occured in api call
-        console.log(await res.json());
-    }
-    useEffect(() => {
-        getMyReservations();
-    }, []);
-    return { reservations }
-}
+
+export const useGetMyReservations = (
+	token: string | undefined,
+	pageNum: number,
+	pageSize: number,
+	setNextExists: React.Dispatch<React.SetStateAction<boolean>>,
+	filteringInfo: {
+		sortBy: string;
+		stateToFilterBy: string;
+		userType: string;
+	}
+) => {
+	const [reservations, setReservations] = useState<Reservation[]>([]);
+	const getMyReservations = async () => {
+		if (token === undefined) return;
+		const res = await fetch(
+			`/reservations/mine/?page_size=${pageSize}&page=${pageNum}&userType=${filteringInfo.userType}}`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		if (res.ok) {
+			const data = await res.json();
+			setReservations(data.results);
+			console.log("Reservations successfully fetched");
+			if (data.next === null) {
+				setNextExists(false);
+			} else {
+				setNextExists(true);
+			}
+			return;
+		}
+		// Error occured in api call
+		console.log(await res.json());
+	};
+	useEffect(() => {
+		getMyReservations();
+	}, [token, pageNum, pageSize, filteringInfo]);
+	return { reservations, setReservations };
+};
