@@ -21,7 +21,7 @@ const DisplayReservations = ({
 	} else {
 		sortedReservations = reservations.sort((a, b) => {
 			if (a.start_date < b.start_date) return -1;
-			else if (a.status === b.status) return 0;
+			else if (a.start_date === b.start_date) return 0;
 			else return 1;
 		});
 	}
