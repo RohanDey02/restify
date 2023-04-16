@@ -57,7 +57,7 @@ export default function MyReservations() {
 				setSelectedRes={setSelectedRes}
 				filteringInfo={filteringInfo}
 			/>
-			{/* Contains SVGs used for arrows in sorting and displays current page num */}
+			{/* Contains SVGs used for arrows in pagination and displays current page num */}
 			<Pagination
 				nextExists={nextExists}
 				pageNum={pageNum}
