@@ -48,10 +48,16 @@ export default function MyReservations() {
 				setSelectedRes={setSelectedRes}
 				filteringInfo={filteringInfo}
 			/>
-			<Pagination nextExists={nextExists} pageNum={pageNum} setPageNum={setPageNum}/>
-			<StatusModal selectedRes={selectedRes} setSelectedRes={setSelectedRes} setReservations={setReservations}/>
+			<Pagination
+				nextExists={nextExists}
+				pageNum={pageNum}
+				setPageNum={setPageNum}
+			/>
+			<StatusModal
+				selectedRes={selectedRes}
+				setSelectedRes={setSelectedRes}
+				setReservations={setReservations}
+			/>
 		</div>
 	);
 }
-
-
