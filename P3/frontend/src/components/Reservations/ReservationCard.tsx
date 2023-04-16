@@ -27,7 +27,7 @@ const ReservationCard = ({
 			case "Approved":
 				return "text-green-500 ";
 			case "Completed":
-				return "text-green-300";
+				return "text-green-500";
 			case "Denied":
 				return "text-red-500";
 			case "Terminated":
