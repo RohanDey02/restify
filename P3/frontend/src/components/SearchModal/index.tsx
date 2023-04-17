@@ -12,7 +12,7 @@ interface Item {
 
 const sortOptions: Item[] = [
     { 'id': 1, 'name': 'location', 'value': 'Location' },
-    { 'id': 2, 'name': 'max_number_of_guests', 'value': 'Maximum Number Of Guests' },
+    { 'id': 2, 'name': 'max_number_of_guests', 'value': 'Minimum Number Of Guests' },
     { 'id': 3, 'name': 'price', 'value': 'Price' },
     { 'id': 4, 'name': 'title', 'value': 'Title' }
 ]
@@ -304,7 +304,7 @@ function SearchModal(props: { show: boolean; handleClose: any; onModalSubmit: (d
 
                                     {/* Next Row */}
                                     <p className="text-sm text-gray-500">Title:</p>
-                                    <p className="text-sm text-gray-500">Maximum Number Of Guests:</p>
+                                    <p className="text-sm text-gray-500">Minimum Number Of Guests:</p>
 
                                     <div className="inline-flex gap-1">
                                         <input
@@ -315,6 +315,7 @@ function SearchModal(props: { show: boolean; handleClose: any; onModalSubmit: (d
                                             onChange={(event) =>
                                                 setTitle(event.target.value)
                                             }
+                                            value={title}
                                         />
                                     </div>
 
