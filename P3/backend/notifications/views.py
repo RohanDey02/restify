@@ -11,29 +11,15 @@ class CreateNotification(APIView):
     def post(self, request):
         if request.user.is_authenticated:
             data = request.data
-            if data.get('title') is None or data.get('description') is None or data.get('status') is None or data.get('user_id') is None or data.get('host_id') is None:
+            if data.get('title') is None or data.get('description') is None or data.get('status') is None:
                 return Response({'message': 'Missing fields'}, status=status.HTTP_400_BAD_REQUEST)
-            user = None
-            host = None
-            try:
-                user = RestifyUser.objects.get(id=data['user_id'])
-            except:
-                return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-            try:
-                host = RestifyUser.objects.get(id=data['host_id'])
-            except:
-                return Response({'message': 'Host not found'}, status=status.HTTP_404_NOT_FOUND)
-            if user.account_type != 'User':
-                return Response({'message': 'User is not a user'}, status=status.HTTP_400_BAD_REQUEST)
-            if host.account_type != 'Host':
-                return Response({'message': 'Host is not a host'}, status=status.HTTP_400_BAD_REQUEST)
             notification = Notifications(
                 title=data['title'],
                 description=data['description'],
                 url=data.get('url', None),
                 status=data['status'],
-                user_id=user.id,
-                host_id=host.id
+                user_id=data.get('user_id', None),
+                host_id=data.get('host_id', None)
             )
             notification.save()
             return Response({'message': 'Success', 'data': {
@@ -42,8 +28,8 @@ class CreateNotification(APIView):
                 'description': notification.description,
                 'url': notification.url,
                 'status': notification.status,
-                'user_id': user.id,
-                'host_id': host.id
+                'user_id': notification.user.id if notification.user else None,
+                'host_id': notification.host.id if notification.host else None
             }}, status=status.HTTP_201_CREATED)
         else:
             return Response({'message': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -62,8 +48,8 @@ class GetNotifications(ListAPIView):
                 'description': notification.description,
                 'url': notification.url,
                 'status': notification.status,
-                'user_id': notification.user.id,
-                'host_id': notification.host.id
+                'user_id': notification.user.id if notification.user else None,
+                'host_id': notification.host.id if notification.host else None
             } for notification in notifications]}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -72,27 +58,25 @@ class UpdateNotification(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             data = request.data
-            if data.get('title') is None or data.get('description') is None or data.get('status') is None or data.get('user_id') is None or data.get('host_id') is None:
+            if data.get('title') is None or data.get('description') is None or data.get('status') is None:
                 return Response({'message': 'Missing fields'}, status=status.HTTP_400_BAD_REQUEST)
             user = None
             host = None
-            try:
-                user = RestifyUser.objects.get(id=data['user_id'])
-            except:
-                return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-            try:
-                host = RestifyUser.objects.get(id=data['host_id'])
-            except:
-                return Response({'message': 'Host not found'}, status=status.HTTP_404_NOT_FOUND)
+            if data.get('user_id', None) is not None:
+                try:
+                    user = RestifyUser.objects.get(id=data['user_id'])
+                except:
+                    return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            if data.get('host_id', None) is not None:
+                try:
+                    host = RestifyUser.objects.get(id=data['host_id'])
+                except:
+                    return Response({'message': 'Host not found'}, status=status.HTTP_404_NOT_FOUND)
             notification = None
             try:
                 notification = Notifications.objects.get(id=kwargs['id'])
             except:
                 return Response({'message': 'Notification not found'}, status=status.HTTP_404_NOT_FOUND)
-            if user.account_type != 'User':
-                return Response({'message': 'User is not a user'}, status=status.HTTP_400_BAD_REQUEST)
-            if host.account_type != 'Host':
-                return Response({'message': 'Host is not a host'}, status=status.HTTP_400_BAD_REQUEST)
             notification.title = data['title']
             notification.description = data['description']
             notification.url = data.get('url', None)
@@ -106,8 +90,8 @@ class UpdateNotification(UpdateAPIView):
                 'description': notification.description,
                 'url': notification.url,
                 'status': notification.status,
-                'user_id': user.id,
-                'host_id': host.id
+                'user_id': user.id if user else None,
+                'host_id': host.id if host else None
             }}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -126,8 +110,8 @@ def get_notification(request, id):
             'description': notification.description,
             'url': notification.url,
             'status': notification.status,
-            'user_id': notification.user.id,
-            'host_id': notification.host.id
+            'user_id': notification.user.id if notification.user else None,
+            'host_id': notification.host.id if notification.host else None
         }}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -140,8 +124,6 @@ class DeleteNotification(APIView):
                 notification = Notifications.objects.get(id=id)
             except:
                 return Response({'message': 'Notification not found'}, status=status.HTTP_404_NOT_FOUND)
-            if notification.user.id != self.request.user.id and notification.host.id != self.request.user.id:
-                return Response({'message': 'User is not a host or user specified in this notification'}, status=status.HTTP_401_UNAUTHORIZED)
             notification.delete()
             return Response({'message': 'Notification successfully deleted'}, status=status.HTTP_200_OK)
         else:

@@ -51,22 +51,23 @@ export default function MyNotifications() {
 
     async function handleNotificationSelect(notification: Notification): Promise<any> {
         setSelectedNotification(notification);
-        var notificationJson = notification.url ? JSON.stringify({
-            title: notification.title,
-            description: notification.description,
-            url: notification.url,
-            status: 'Read',
-            user_id: notification.user_id,
-            host_id: notification.host_id
-        })
-        :
-        JSON.stringify({
+        var notificationJson = JSON.stringify({
             title: notification.title,
             description: notification.description,
             status: 'Read',
-            user_id: notification.user_id,
-            host_id: notification.host_id
         })
+        if (notification.url) {
+            let newObject = Object.assign({}, JSON.parse(notificationJson), {["url"]: notification.url});
+            notificationJson = JSON.stringify(newObject);
+        }
+        if (notification.host_id) {
+            let newObject = Object.assign({}, JSON.parse(notificationJson), {["host_id"]: notification.host_id});
+            notificationJson = JSON.stringify(newObject);
+        }
+        if (notification.user_id) {
+            let newObject = Object.assign({}, JSON.parse(notificationJson), {["user_id"]: notification.user_id});
+            notificationJson = JSON.stringify(newObject);
+        }
         try {
 			const response = await fetch(`/notifications/${notification.id}/update/`, {
 				method: "PATCH",
