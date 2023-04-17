@@ -110,6 +110,86 @@ export default function MyNotifications() {
 		}
     }
 
+    async function handleApproveCancellationRequest(notification: Notification): Promise<any> {
+        setSelectedNotification(null);
+        try {
+			const response = await fetch(`/notifications/create/`, {
+				method: "POST",
+				headers: {
+					'Authorization': `Bearer ${tokens.access}`,
+					'Content-type': 'application/json'
+				},
+                body: JSON.stringify({
+                    title: 'Update on Cancellation Request',
+                    description: 'Your cancellation request has been approved.',
+                    status: 'Unread',
+                    user_id: notification.user_id,
+                    host_id: notification.host_id
+                })
+			});
+
+			if (!response.ok) {
+				console.error('An error has occurred!');
+			} else {
+				try {
+                    const response = await fetch(`/reservations/${notification.url}/update/`, {
+                        method: "PUT",
+                        headers: {
+                            'Authorization': `Bearer ${tokens.access}`,
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: 'cancelled'
+                        })
+                    });
+        
+                    if (!response.ok) {
+                        console.error('An error has occurred!');
+                    } else {
+                        handleNotificationDelete(notification);
+                    }
+                } catch (error) {
+                    console.error('There was a problem with the fetch request:');
+                    throw error;
+                }
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch request:');
+			throw error;
+		}
+    }
+
+    async function handleDenyCancellationRequest(notification: Notification): Promise<any> {
+        setSelectedNotification(null);
+        console.log('here');
+        try {
+			const response = await fetch(`/notifications/create/`, {
+				method: "POST",
+				headers: {
+					'Authorization': `Bearer ${tokens.access}`,
+					'Content-type': 'application/json'
+				},
+                body: JSON.stringify({
+                    title: 'Update on Cancellation Request',
+                    description: 'Your cancellation request has been denied. Please contact the host for more information.',
+                    status: 'Unread',
+                    user_id: notification.user_id,
+                    host_id: notification.host_id
+                })
+			});
+
+            console.log(response);
+			if (!response.ok) {
+				console.error('An error has occurred!');
+			} else {
+				handleNotificationDelete(notification);
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch request:');
+			throw error;
+		}
+    }
+
     useEffect(() => {
 		const storedData = localStorage.getItem('data');
         const storedTokens = localStorage.getItem('tokens');
@@ -154,6 +234,8 @@ export default function MyNotifications() {
                             setSelectedNotification={() => handleNotificationSelect(notification)}
                             selected={false}
                             handleNotificationDelete={() => handleNotificationDelete(notification)}
+                            handleApproveCancellationRequest={() => handleApproveCancellationRequest(notification)}
+                            handleDenyCancellationRequest={() => handleDenyCancellationRequest(notification)}
                         />
                     )
                 })}
@@ -167,6 +249,8 @@ export default function MyNotifications() {
                                 setSelectedNotification={() => {setSelectedNotification(notification)}}
                                 selected={false}
                                 handleNotificationDelete={() => handleNotificationDelete(notification)}
+                                handleApproveCancellationRequest={() => handleApproveCancellationRequest(notification)}
+                                handleDenyCancellationRequest={() => handleDenyCancellationRequest(notification)}
                             />
                         )
                     })}
@@ -181,6 +265,8 @@ export default function MyNotifications() {
                         setSelectedNotification={() => {setSelectedNotification(null)}}
                         selected={true}
                         handleNotificationDelete={() => handleNotificationDelete(selectedNotification)}
+                        handleApproveCancellationRequest={() => handleApproveCancellationRequest(selectedNotification)}
+                        handleDenyCancellationRequest={() => handleDenyCancellationRequest(selectedNotification)}
                     />
                 </Box>
             </Modal>
