@@ -93,7 +93,7 @@ const ModalBox = ({
 				)
 			);
 			const notification_message = `Request at ${property?.title} for date ${selectedRes.start_date} was denied.`;
-			const notification_res = await fetch("/notifications/create", {
+			const notification_res = await fetch("/notifications/create/", {
 				method: "POST",
 				body: JSON.stringify({
 					title: "Denied Request",
