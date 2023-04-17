@@ -16,7 +16,7 @@ export const useGetMyReservations = (
 	const getMyReservations = async () => {
 		if (token === undefined) return;
 		const res = await fetch(
-			`/reservations/mine/?page_size=${pageSize}&page=${pageNum}&userType=${filteringInfo.userType}}`,
+			`/reservations/mine/?page_size=${pageSize}&page=${pageNum}&userType=${filteringInfo.userType}`,
 			{
 				method: "GET",
 				headers: {
@@ -28,6 +28,7 @@ export const useGetMyReservations = (
 		if (res.ok) {
 			const data = await res.json();
 			setReservations(data.results);
+			console.log(data.results);
 			console.log("Reservations successfully fetched");
 			if (data.next === null) {
 				setNextExists(false);

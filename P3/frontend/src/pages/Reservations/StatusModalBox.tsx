@@ -62,7 +62,6 @@ const ModalBox = ({
 					description: notification_message,
 					status: "Unread",
 					user_id: resWithForeignKeys?.user,
-					host_id: resWithForeignKeys?.host,
 				}),
 				headers: {
 					"Content-Type": "application/json",
@@ -93,7 +92,7 @@ const ModalBox = ({
 					res.id === selectedRes.id ? { ...res, status: "Denied" } : res
 				)
 			);
-			const notification_message = `Request at ${property?.title} for date ${selectedRes.start_date} denied.`;
+			const notification_message = `Request at ${property?.title} for date ${selectedRes.start_date} was denied.`;
 			const notification_res = await fetch("/notifications/create", {
 				method: "POST",
 				body: JSON.stringify({
@@ -101,7 +100,6 @@ const ModalBox = ({
 					description: notification_message,
 					status: "Unread",
 					user_id: resWithForeignKeys?.user,
-					host_id: resWithForeignKeys?.host,
 				}),
 				headers: {
 					"Content-Type": "application/json",
@@ -125,7 +123,6 @@ const ModalBox = ({
 				description: notification_message,
 				status: "Unread",
 				url: `${resWithForeignKeys?.id}`,
-				user_id: resWithForeignKeys?.user,
 				host_id: resWithForeignKeys?.host,
 			}),
 			headers: {
@@ -165,7 +162,6 @@ const ModalBox = ({
 					status: "Unread",
 					url: "",
 					user_id: resWithForeignKeys?.user,
-					host_id: resWithForeignKeys?.host,
 				}),
 				headers: {
 					"Content-Type": "application/json",

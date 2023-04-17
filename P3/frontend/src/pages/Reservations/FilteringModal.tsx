@@ -37,6 +37,12 @@ const FilteringModal = ({
 		p: 4,
 	}; // style for modal box
     const { data } = useToken();
+	const setType = (newType: string) => {
+		const temp = filteringInfo;
+		temp.userType = newType;
+		setFilteringInfo(temp);
+	}
+
 	return (
 		<div>
 			<div className="flex justify-center pt-2">
@@ -70,12 +76,12 @@ const FilteringModal = ({
 							<label className="font-semibold">Status</label>
 							<select
 								value={filteringInfo.stateToFilterBy}
-								onChange={(e) =>
-									setFilteringInfo({
-										...filteringInfo,
+								onChange={(e) => {
+									setFilteringInfo( prev => ({
+										...prev,
 										stateToFilterBy: e.target.value,
-									})
-								}
+									}))
+								}}
 							>
 								<option value=""></option>
 								<option value="Pending">Pending</option>
@@ -100,12 +106,7 @@ const FilteringModal = ({
 								<label className="font-semibold">User Type</label>
 								<select
 									value={filteringInfo.userType}
-									onChange={(e) => {
-										setFilteringInfo({
-											...filteringInfo,
-											userType: e.target.value,
-										});
-									}}
+									onChange={(e) => setFilteringInfo({ ...filteringInfo, userType: e.target.value })}
 								>
 									<option value="Host">Host</option>
 									<option value="User">User</option>

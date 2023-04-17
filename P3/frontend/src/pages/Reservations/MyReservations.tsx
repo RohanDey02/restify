@@ -27,6 +27,7 @@ export default function MyReservations() {
 		stateToFilterBy: string;
 		userType: string;
 	}>({ sortBy: "Start Date", stateToFilterBy: "", userType: data.user_type });
+	
 	const { reservations, setReservations } = useGetMyReservations(
 		access_token,
 		pageNum,

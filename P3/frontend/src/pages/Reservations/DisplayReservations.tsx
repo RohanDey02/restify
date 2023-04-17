@@ -32,7 +32,7 @@ const DisplayReservations = ({
 		);
 	}
 	return (
-		<div className="w-full flex overflow-x-auto flex-col sm:flex-row sm:justify-center">
+		<div className="w-full flex overflow-x-auto flex-col flex-wrap sm:flex-row sm:justify-center">
 			{sortedReservations.map((reservation) => {
 				return (
 					<ReservationCard
