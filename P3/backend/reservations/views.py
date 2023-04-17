@@ -63,7 +63,8 @@ def get_reservation_by_id(request, id):
                 'status': reservation.status,
                 'feedback': reservation.feedback,
                 'user': reservation.user.id,
-                'property': reservation.property.id
+                'property': reservation.property.id,
+                "host": reservation.property.host.id,
             }
         }, status=status.HTTP_200_OK)
     else:
