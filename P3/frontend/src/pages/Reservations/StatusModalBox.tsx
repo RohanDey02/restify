@@ -3,6 +3,7 @@ import useToken from "../../assets/hooks/useToken";
 import { Box } from "@mui/material";
 import { useGetResById } from "../../assets/hooks/useGetReservationById";
 import { Reservation } from "../../assets/types/Reservation";
+import { useGetPropById } from "../../assets/hooks/useGetPropById";
 
 type ModalBoxProps = {
 	selectedRes: Reservation;
@@ -17,6 +18,10 @@ const ModalBox = ({
 	const { tokens, data } = useToken();
 	const navigate = useNavigate();
 	const { resWithForeignKeys } = useGetResById(selectedRes.id, tokens.access);
+	const { property } = useGetPropById(
+		resWithForeignKeys?.property,
+		tokens.access
+	);
 	const box_style = {
 		position: "absolute" as "absolute",
 		top: "50%",
@@ -49,9 +54,26 @@ const ModalBox = ({
 					res.id === selectedRes.id ? { ...res, status: "Approved" } : res
 				)
 			);
+			const notification_message = `Request at ${property?.title} for date ${selectedRes.start_date} was approved.`;
+			const notification_res = await fetch("/notifications/create/", {
+				method: "POST",
+				body: JSON.stringify({
+					title: "Approved Request",
+					description: notification_message,
+					status: "Unread",
+					user_id: resWithForeignKeys?.user,
+					host_id: resWithForeignKeys?.host,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${tokens.access}`,
+				},
+			});
+			await notification_res.json();
 		}
 		setSelectedRes(null);
 	};
+
 	const handleDeny = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
@@ -71,6 +93,22 @@ const ModalBox = ({
 					res.id === selectedRes.id ? { ...res, status: "Denied" } : res
 				)
 			);
+			const notification_message = `Request at ${property?.title} for date ${selectedRes.start_date} denied.`;
+			const notification_res = await fetch("/notifications/create", {
+				method: "POST",
+				body: JSON.stringify({
+					title: "Denied Request",
+					description: notification_message,
+					status: "Unread",
+					user_id: resWithForeignKeys?.user,
+					host_id: resWithForeignKeys?.host,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${tokens.access}`,
+				},
+			});
+			await notification_res.json();
 		}
 		setSelectedRes(null);
 	};
@@ -79,25 +117,26 @@ const ModalBox = ({
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
 		e.preventDefault();
-		const res = await fetch(`/reservations/${selectedRes.id}/update/`, {
-			method: "PUT",
-			body: JSON.stringify({ status: "cancelled" }),
+		const notification_message = `Cancellation request at ${property?.title} for date ${selectedRes.start_date}.`;
+		const notification_res = await fetch("/notifications/create/", {
+			method: "POST",
+			body: JSON.stringify({
+				title: "Cancellation Request",
+				description: notification_message,
+				status: "Unread",
+				url: `${resWithForeignKeys?.id}`,
+				user_id: resWithForeignKeys?.user,
+				host_id: resWithForeignKeys?.host,
+			}),
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${tokens.access}`,
 			},
 		});
-		await res.json();
-		if (res.ok) {
-			setReservations((prev) =>
-				prev.map((res) =>
-					res.id === selectedRes.id ? { ...res, status: "Cancelled" } : res
-				)
-			);
-		}
-
+		await notification_res.json();
 		setSelectedRes(null);
 	};
+
 	const handleTerminate = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
@@ -117,6 +156,23 @@ const ModalBox = ({
 					res.id === selectedRes.id ? { ...res, status: "Terminated" } : res
 				)
 			);
+			const notification_message = `Reservation terminated at ${property?.title} for date ${selectedRes.start_date}.`;
+			const notification_res = await fetch("/notifications/create/", {
+				method: "POST",
+				body: JSON.stringify({
+					title: "Terminated Reservation",
+					description: notification_message,
+					status: "Unread",
+					url: "",
+					user_id: resWithForeignKeys?.user,
+					host_id: resWithForeignKeys?.host,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${tokens.access}`,
+				},
+			});
+			await notification_res.json();
 		}
 		setSelectedRes(null);
 	};
@@ -238,6 +294,25 @@ const ModalBox = ({
 				</div>
 			</Box>
 		);
+	} else if (selectedRes.status === "Completed") {
+		return (
+			<Box sx={box_style}>
+				<p
+					className="text-xl text-center text-blue-400 cursor-pointer hover:text-blue-500"
+					onClick={() => navigate(`/initialrating/${selectedRes.id}`)}
+				>
+					Leave a Review
+				</p>
+				<p
+					className="text-xl text-center text-blue-400 cursor-pointer hover:text-blue-500"
+					onClick={() =>
+						navigate("/property", { state: resWithForeignKeys?.property })
+					}
+				>
+					View Original Listing
+				</p>
+			</Box>
+		);
 	} else {
 		return (
 			<Box sx={box_style}>
@@ -254,4 +329,4 @@ const ModalBox = ({
 	}
 };
 
-export default ModalBox
+export default ModalBox;

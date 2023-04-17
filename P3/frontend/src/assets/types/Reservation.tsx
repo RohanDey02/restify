@@ -5,5 +5,6 @@ export type Reservation = {
     feedback: number,
     user: number,
     status: string,
-    property: number
+    property: number,
+    host: number,
 }
