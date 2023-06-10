@@ -15,6 +15,7 @@ Restify is an Airbnb clone developed as a project for CSC309H1: Programming on t
 
 - Frontend: React TypeScript
 - Backend: Django Rest Framework (Python)
+- Documentation: Swagger
 - Styling: Tailwind CSS
 
 ## Installation
@@ -71,6 +72,10 @@ npm start
 ```
 
 The frontend development server should now be running on `http://localhost:3000`.
+
+## Documentation
+
+Documentation is available in `P2/restify/documentation.yaml` and was created using Swagger. Alternatively, it is available at `P2/restify/docs.pdf`.
 
 ## Usage
 
